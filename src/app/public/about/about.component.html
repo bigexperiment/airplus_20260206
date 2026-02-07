@@ -1,50 +1,33 @@
-<div class="about-page">
+<div class="about-page" *ngIf="aboutHero">
   <!-- Hero Section -->
   <section class="about-hero">
     <div class="hero-bg"></div>
     <div class="hero-content">
-      <span class="hero-badge">Est. 2012</span>
-      <h1>Your Adventure <span class="gradient-text">Starts Here</span></h1>
-      <p>We've been guiding travelers through Nepal's most breathtaking landscapes for over a decade. Our passion is your journey.</p>
+      <span class="hero-badge">{{ aboutHero.badge }}</span>
+      <h1>{{ aboutHero.title }}</h1>
+      <p>{{ aboutHero.subtitle }}</p>
     </div>
   </section>
 
   <!-- Story Section -->
-  <section class="story-section">
+  <section class="story-section" *ngIf="aboutStory">
     <div class="container">
       <div class="story-grid">
         <div class="story-image">
-          <img src="https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?w=800" alt="Nepal Mountains" loading="lazy">
+          <img [src]="aboutStory.imageUrl" alt="Nepal Mountains" loading="lazy">
           <div class="story-badge">
-            <strong>12+</strong>
-            <span>Years of Excellence</span>
+            <strong>{{ aboutStory.yearsValue }}</strong>
+            <span>{{ aboutStory.yearsLabel }}</span>
           </div>
         </div>
         <div class="story-content">
-          <span class="eyebrow">Our Story</span>
-          <h2>Born From a Love of the Himalayas</h2>
-          <p>
-            AirPlus Nepal began as a dream shared by passionate mountaineers and travel enthusiasts. 
-            Founded in the heart of Thamel, Kathmandu, we've grown from a small trekking agency 
-            into one of Nepal's most trusted adventure companies.
-          </p>
-          <p>
-            We believe that trekking is more than just walking in the mountains — it's about connecting 
-            with nature, experiencing local cultures, and creating memories that last a lifetime. Every 
-            step on the trail is a story waiting to be told.
-          </p>
-          <div class="story-stats">
-            <div class="mini-stat">
-              <strong>1,200+</strong>
-              <span>Happy Trekkers</span>
-            </div>
-            <div class="mini-stat">
-              <strong>50+</strong>
-              <span>Trek Routes</span>
-            </div>
-            <div class="mini-stat">
-              <strong>98%</strong>
-              <span>Success Rate</span>
+          <span class="eyebrow">{{ aboutStory.eyebrow }}</span>
+          <h2>{{ aboutStory.title }}</h2>
+          <p *ngFor="let para of aboutStory.paragraphs">{{ para }}</p>
+          <div class="story-stats" *ngIf="aboutStory.stats.length > 0">
+            <div class="mini-stat" *ngFor="let stat of aboutStory.stats">
+              <strong>{{ stat.value }}</strong>
+              <span>{{ stat.label }}</span>
             </div>
           </div>
         </div>
@@ -53,137 +36,57 @@
   </section>
 
   <!-- Values Section -->
-  <section class="values-section">
+  <section class="values-section" *ngIf="aboutValues.length > 0">
     <div class="container">
       <div class="section-header">
         <span class="eyebrow">What Drives Us</span>
         <h2>Our Core Values</h2>
       </div>
       <div class="values-grid">
-        <div class="value-card">
-          <div class="value-icon safety">
-            <mat-icon>shield</mat-icon>
+        <div class="value-card" *ngFor="let value of aboutValues">
+          <div class="value-icon" [ngClass]="value.colorClass">
+            <mat-icon>{{ value.icon }}</mat-icon>
           </div>
-          <h3>Safety First</h3>
-          <p>Your safety is our top priority. Every trek is planned with comprehensive risk assessments, emergency protocols, and experienced guides.</p>
-        </div>
-        <div class="value-card">
-          <div class="value-icon eco">
-            <mat-icon>eco</mat-icon>
-          </div>
-          <h3>Eco-Conscious</h3>
-          <p>We practice leave-no-trace principles and actively support environmental conservation in the Himalayan region.</p>
-        </div>
-        <div class="value-card">
-          <div class="value-icon community">
-            <mat-icon>diversity_3</mat-icon>
-          </div>
-          <h3>Community Impact</h3>
-          <p>We employ local guides and porters, support local businesses, and contribute to community development projects.</p>
-        </div>
-        <div class="value-card">
-          <div class="value-icon quality">
-            <mat-icon>workspace_premium</mat-icon>
-          </div>
-          <h3>Premium Quality</h3>
-          <p>From equipment to accommodation, we ensure every aspect of your trek meets the highest standards of quality.</p>
+          <h3>{{ value.title }}</h3>
+          <p>{{ value.description }}</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Team Section -->
-  <section class="team-section">
+  <section class="team-section" *ngIf="teamMembers.length > 0">
     <div class="container">
       <div class="section-header">
         <span class="eyebrow">Meet the Crew</span>
         <h2>The People Behind Your Adventures</h2>
       </div>
       <div class="team-grid">
-        <div class="team-card">
+        <div class="team-card" *ngFor="let member of teamMembers">
           <div class="team-avatar">
-            <div class="avatar-placeholder">MB</div>
+            <div class="avatar-placeholder">{{ member.initials }}</div>
           </div>
-          <h4>Madan Bhandari</h4>
-          <span class="team-role">Founder & Director</span>
-          <p>20+ years of Himalayan expertise. Madan's passion for the mountains drives every expedition we organize.</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar">
-            <div class="avatar-placeholder">RG</div>
-          </div>
-          <h4>Ram Gurung</h4>
-          <span class="team-role">Head Guide</span>
-          <p>Certified mountaineer with extensive knowledge of all major trekking routes in Nepal.</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar">
-            <div class="avatar-placeholder">ST</div>
-          </div>
-          <h4>Sita Tamang</h4>
-          <span class="team-role">Operations Manager</span>
-          <p>Ensures every trek runs smoothly from start to finish with meticulous planning and coordination.</p>
-        </div>
-        <div class="team-card">
-          <div class="team-avatar">
-            <div class="avatar-placeholder">PS</div>
-          </div>
-          <h4>Pasang Sherpa</h4>
-          <span class="team-role">Senior Trek Guide</span>
-          <p>Born in the Khumbu region, Pasang's intimate knowledge of the trails makes every trek special.</p>
+          <h4>{{ member.name }}</h4>
+          <span class="team-role">{{ member.role }}</span>
+          <p>{{ member.description }}</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Why Choose Us Section -->
-  <section class="why-section">
+  <section class="why-section" *ngIf="whyChooseUs.length > 0">
     <div class="container">
       <div class="section-header light">
         <span class="eyebrow">Why AirPlus Nepal</span>
         <h2>What Sets Us Apart</h2>
       </div>
       <div class="why-grid">
-        <div class="why-item">
-          <mat-icon>verified_user</mat-icon>
+        <div class="why-item" *ngFor="let item of whyChooseUs">
+          <mat-icon>{{ item.icon }}</mat-icon>
           <div>
-            <h4>Licensed & Registered</h4>
-            <p>Fully licensed by Nepal Tourism Board with all required permits and insurance coverage.</p>
-          </div>
-        </div>
-        <div class="why-item">
-          <mat-icon>groups</mat-icon>
-          <div>
-            <h4>Expert Local Guides</h4>
-            <p>All our guides are certified, first-aid trained, and deeply knowledgeable about the trails.</p>
-          </div>
-        </div>
-        <div class="why-item">
-          <mat-icon>tune</mat-icon>
-          <div>
-            <h4>Custom Itineraries</h4>
-            <p>Every trek can be customized to your fitness level, interests, and timeline.</p>
-          </div>
-        </div>
-        <div class="why-item">
-          <mat-icon>support_agent</mat-icon>
-          <div>
-            <h4>24/7 Support</h4>
-            <p>Round-the-clock assistance before, during, and after your trek through our Nepal team.</p>
-          </div>
-        </div>
-        <div class="why-item">
-          <mat-icon>local_atm</mat-icon>
-          <div>
-            <h4>Fair Transparent Pricing</h4>
-            <p>No hidden fees. What you see is what you pay, with the best value for your money.</p>
-          </div>
-        </div>
-        <div class="why-item">
-          <mat-icon>emoji_events</mat-icon>
-          <div>
-            <h4>Proven Track Record</h4>
-            <p>1,200+ successful treks with a 98% success rate and glowing reviews from travelers worldwide.</p>
+            <h4>{{ item.title }}</h4>
+            <p>{{ item.description }}</p>
           </div>
         </div>
       </div>
@@ -191,43 +94,28 @@
   </section>
 
   <!-- Certifications Section -->
-  <section class="cert-section">
+  <section class="cert-section" *ngIf="certifications.length > 0">
     <div class="container">
       <div class="section-header">
         <span class="eyebrow">Trust & Credibility</span>
         <h2>Our Certifications</h2>
       </div>
       <div class="cert-grid">
-        <div class="cert-card">
-          <mat-icon>business</mat-icon>
-          <span class="cert-label">Company Reg.</span>
-          <strong>194768/075/076</strong>
-        </div>
-        <div class="cert-card">
-          <mat-icon>card_membership</mat-icon>
-          <span class="cert-label">Tourism License</span>
-          <strong>2605</strong>
-        </div>
-        <div class="cert-card">
-          <mat-icon>receipt_long</mat-icon>
-          <span class="cert-label">VAT Registration</span>
-          <strong>606643944</strong>
-        </div>
-        <div class="cert-card">
-          <mat-icon>verified</mat-icon>
-          <span class="cert-label">Nepal Tourism Board</span>
-          <strong>Certified</strong>
+        <div class="cert-card" *ngFor="let cert of certifications">
+          <mat-icon>{{ cert.icon }}</mat-icon>
+          <span class="cert-label">{{ cert.label }}</span>
+          <strong>{{ cert.value }}</strong>
         </div>
       </div>
     </div>
   </section>
 
   <!-- CTA Section -->
-  <section class="about-cta">
+  <section class="about-cta" *ngIf="aboutCta">
     <div class="container">
       <div class="cta-content">
-        <h2>Ready to Trek With Us?</h2>
-        <p>Start planning your Himalayan adventure today. Our team is ready to help you create the trip of a lifetime.</p>
+        <h2>{{ aboutCta.title }}</h2>
+        <p>{{ aboutCta.subtitle }}</p>
         <div class="cta-buttons">
           <button mat-raised-button class="cta-primary" routerLink="/treks">
             <mat-icon>explore</mat-icon> Explore Treks

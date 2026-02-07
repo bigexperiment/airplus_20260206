@@ -6,7 +6,7 @@
           <mat-icon>flight</mat-icon>
           <span>{{ company.name }}</span>
         </div>
-        <p>Your trusted partner for unforgettable Himalayan adventures. Licensed and registered trekking company with 12+ years of experience.</p>
+        <p>{{ footerTagline }}</p>
         <div class="registration-info">
           <span>Reg: {{ company.registration }}</span>
           <span>License: {{ company.license }}</span>
@@ -48,23 +48,11 @@
         </div>
       </div>
 
-      <div class="footer-section">
+      <div class="footer-section" *ngIf="representatives.length > 0">
         <h4>Local Representatives</h4>
-        <div class="rep-item">
-          <span class="country">Australia</span>
-          <a href="mailto:homnathbhandari2016@gmail.com">homnathbhandari2016&#64;gmail.com</a>
-        </div>
-        <div class="rep-item">
-          <span class="country">Canada</span>
-          <a href="mailto:Subashbhandari1902@gmail.com">Subashbhandari1902&#64;gmail.com</a>
-        </div>
-        <div class="rep-item">
-          <span class="country">Japan</span>
-          <a href="mailto:bhandariraju575@gmail.com">bhandariraju575&#64;gmail.com</a>
-        </div>
-        <div class="rep-item">
-          <span class="country">USA</span>
-          <a href="mailto:ganeshadhikari332@gmail.com">ganeshadhikari332&#64;gmail.com</a>
+        <div class="rep-item" *ngFor="let rep of representatives">
+          <span class="country">{{ rep.country }}</span>
+          <a [href]="'mailto:' + rep.email">{{ rep.email }}</a>
         </div>
       </div>
     </div>

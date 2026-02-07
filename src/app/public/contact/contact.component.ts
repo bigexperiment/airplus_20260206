@@ -1,19 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
+import { SiteContentService } from '../../services';
+import { CompanyInfo, RepresentativeItem, OfficeHoursItem, ContactPageContent } from '../../models';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit, OnDestroy {
   contactForm: FormGroup;
   submitting = false;
 
+  company!: CompanyInfo;
+  representatives: RepresentativeItem[] = [];
+  officeHours: OfficeHoursItem[] = [];
+  contactPage!: ContactPageContent;
+  private sub!: Subscription;
+
   constructor(
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private siteContentService: SiteContentService
   ) {
     this.contactForm = this.fb.group({
       name: ['', Validators.required],
@@ -23,6 +33,21 @@ export class ContactComponent {
       subject: ['', Validators.required],
       message: ['', Validators.required]
     });
+  }
+
+  ngOnInit(): void {
+    this.sub = this.siteContentService.content$.subscribe(content => {
+      this.company = content.companyInfo;
+      this.representatives = content.representatives;
+      this.officeHours = content.officeHours;
+      this.contactPage = content.contactPage;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   submitForm(): void {

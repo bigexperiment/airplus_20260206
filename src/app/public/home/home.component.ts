@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Trek, SiteContent } from '../../models';
+import { Trek, SiteContent, DestinationItem, WhyChooseItem, HowItWorksStep, TrustBadge } from '../../models';
 import { TrekService, SiteContentService } from '../../services';
 
 @Component({
@@ -15,6 +15,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // Site content (reactive)
   content!: SiteContent;
+  destinations: DestinationItem[] = [];
+  whyChooseUs: WhyChooseItem[] = [];
+  howItWorks: HowItWorksStep[] = [];
+  trustBadges: TrustBadge[] = [];
   private contentSub!: Subscription;
 
   constructor(
@@ -26,6 +30,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.contentSub = this.siteContentService.content$.subscribe(content => {
       this.content = content;
+      this.destinations = content.destinations;
+      this.whyChooseUs = content.whyChooseUs;
+      this.howItWorks = content.howItWorks;
+      this.trustBadges = content.trustBadges;
     });
     this.loadFeaturedTreks();
   }

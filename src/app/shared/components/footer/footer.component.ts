@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SiteContentService } from '../../../services';
-import { CompanyInfo } from '../../../models';
+import { CompanyInfo, RepresentativeItem } from '../../../models';
 
 @Component({
   selector: 'app-footer',
@@ -11,6 +11,8 @@ import { CompanyInfo } from '../../../models';
 export class FooterComponent implements OnInit, OnDestroy {
   currentYear = new Date().getFullYear();
   company!: CompanyInfo;
+  footerTagline = '';
+  representatives: RepresentativeItem[] = [];
   private sub!: Subscription;
 
   constructor(private siteContentService: SiteContentService) {}
@@ -18,6 +20,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.siteContentService.content$.subscribe(content => {
       this.company = content.companyInfo;
+      this.footerTagline = content.footerTagline;
+      this.representatives = content.representatives;
     });
   }
 

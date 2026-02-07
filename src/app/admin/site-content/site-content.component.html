@@ -2,7 +2,7 @@
   <div class="page-header">
     <div class="header-left">
       <h1>Site Content Editor</h1>
-      <p class="subtitle">Edit all homepage content — changes appear instantly on the live site</p>
+      <p class="subtitle">Edit all website content — changes appear instantly on the live site</p>
     </div>
     <button mat-stroked-button color="warn" (click)="resetAll()">
       <mat-icon>restart_alt</mat-icon>
@@ -26,27 +26,22 @@
             <input matInput formControlName="badge">
             <mat-hint>Shown above the title (e.g. "🏔️ Nepal's Premier Adventure Company")</mat-hint>
           </mat-form-field>
-
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Title</mat-label>
             <textarea matInput formControlName="title" rows="2"></textarea>
             <mat-hint>Use \n for line breaks</mat-hint>
           </mat-form-field>
-
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Subtitle</mat-label>
             <textarea matInput formControlName="subtitle" rows="3"></textarea>
           </mat-form-field>
-
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Background Image URL</mat-label>
             <input matInput formControlName="backgroundImage">
           </mat-form-field>
-
           <div class="preview-image" *ngIf="heroForm.get('backgroundImage')?.value">
             <img [src]="heroForm.get('backgroundImage')?.value" alt="Hero preview">
           </div>
-
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="heroForm.invalid">
               <mat-icon>save</mat-icon> Save Hero
@@ -71,8 +66,6 @@
             <mat-icon>add</mat-icon> Add Stat
           </button>
         </div>
-
-        <!-- Stat Form -->
         <mat-card class="inline-form-card" *ngIf="editingStat !== undefined && (editingStat || statForm.dirty)">
           <form [formGroup]="statForm" (ngSubmit)="saveStat()">
             <div class="form-row">
@@ -93,8 +86,6 @@
             </div>
           </form>
         </mat-card>
-
-        <!-- Stats List -->
         <div class="items-list">
           <div class="list-item" *ngFor="let stat of stats">
             <div class="item-content">
@@ -102,12 +93,8 @@
               <span class="item-label">{{ stat.label }}</span>
             </div>
             <div class="item-actions">
-              <button mat-icon-button (click)="editStat(stat)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button (click)="deleteStat(stat)" matTooltip="Delete" color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
+              <button mat-icon-button (click)="editStat(stat)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteStat(stat)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
             </div>
           </div>
         </div>
@@ -129,8 +116,6 @@
             <mat-icon>add</mat-icon> Add Service
           </button>
         </div>
-
-        <!-- Service Form -->
         <mat-card class="inline-form-card" *ngIf="editingService !== undefined && (editingService || serviceForm.dirty)">
           <form [formGroup]="serviceForm" (ngSubmit)="saveService()">
             <div class="form-row">
@@ -169,8 +154,6 @@
             </div>
           </form>
         </mat-card>
-
-        <!-- Services List -->
         <div class="items-list">
           <div class="list-item" *ngFor="let service of services">
             <div class="item-content">
@@ -181,12 +164,202 @@
               </div>
             </div>
             <div class="item-actions">
-              <button mat-icon-button (click)="editService(service)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
+              <button mat-icon-button (click)="editService(service)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteService(service)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== DESTINATIONS TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>place</mat-icon>&nbsp; Destinations
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Popular Destinations</h3>
+            <p class="section-desc">Trekking region cards on the homepage</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addDestination()">
+            <mat-icon>add</mat-icon> Add Destination
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingDestination !== undefined && (editingDestination || destinationForm.dirty)">
+          <form [formGroup]="destinationForm" (ngSubmit)="saveDestination()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Region Name</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Trek Count (e.g. "5+ Treks")</mat-label>
+                <input matInput formControlName="trekCount">
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <input matInput formControlName="description">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Image URL</mat-label>
+              <input matInput formControlName="imageUrl">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Card Size</mat-label>
+              <mat-select formControlName="size">
+                <mat-option *ngFor="let s of sizeOptions" [value]="s.value">{{ s.label }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="preview-image" *ngIf="destinationForm.get('imageUrl')?.value">
+              <img [src]="destinationForm.get('imageUrl')?.value" alt="Preview">
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelDestinationEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="destinationForm.invalid">
+                {{ editingDestination ? 'Update' : 'Add' }}
               </button>
-              <button mat-icon-button (click)="deleteService(service)" matTooltip="Delete" color="warn">
-                <mat-icon>delete</mat-icon>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let d of destinations">
+            <div class="item-content">
+              <mat-icon class="item-icon">place</mat-icon>
+              <div>
+                <strong>{{ d.name }}</strong>
+                <span class="item-label">{{ d.trekCount }} — {{ d.description }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editDestination(d)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteDestination(d)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== WHY CHOOSE US TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>thumb_up</mat-icon>&nbsp; Why Us
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Why Choose Us (Homepage)</h3>
+            <p class="section-desc">Benefit cards shown on the homepage</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addWhyChoose()">
+            <mat-icon>add</mat-icon> Add Item
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingWhyChoose !== undefined && (editingWhyChoose || whyChooseForm.dirty)">
+          <form [formGroup]="whyChooseForm" (ngSubmit)="saveWhyChoose()">
+            <mat-form-field appearance="outline">
+              <mat-label>Icon</mat-label>
+              <mat-select formControlName="icon">
+                <mat-option *ngFor="let icon of materialIcons" [value]="icon">
+                  <mat-icon>{{ icon }}</mat-icon> {{ icon }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="2"></textarea>
+            </mat-form-field>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelWhyChooseEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="whyChooseForm.invalid">
+                {{ editingWhyChoose ? 'Update' : 'Add' }}
               </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let w of whyChooseUs">
+            <div class="item-content">
+              <mat-icon class="item-icon">{{ w.icon }}</mat-icon>
+              <div>
+                <strong>{{ w.title }}</strong>
+                <span class="item-label">{{ w.description }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editWhyChoose(w)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteWhyChoose(w)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== HOW IT WORKS TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>format_list_numbered</mat-icon>&nbsp; Steps
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">How It Works</h3>
+            <p class="section-desc">Step-by-step process on the homepage</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addStep()">
+            <mat-icon>add</mat-icon> Add Step
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingStep !== undefined && (editingStep || stepForm.dirty)">
+          <form [formGroup]="stepForm" (ngSubmit)="saveStep()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Step Number (e.g. "01")</mat-label>
+                <input matInput formControlName="number">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Icon</mat-label>
+                <mat-select formControlName="icon">
+                  <mat-option *ngFor="let icon of materialIcons" [value]="icon">
+                    <mat-icon>{{ icon }}</mat-icon> {{ icon }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="2"></textarea>
+            </mat-form-field>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelStepEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="stepForm.invalid">
+                {{ editingStep ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let step of howItWorks">
+            <div class="item-content">
+              <span class="faq-number">{{ step.number }}</span>
+              <div>
+                <strong>{{ step.title }}</strong>
+                <span class="item-label">{{ step.description }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editStep(step)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteStep(step)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
             </div>
           </div>
         </div>
@@ -196,7 +369,7 @@
     <!-- ========== TESTIMONIALS TAB ========== -->
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon>format_quote</mat-icon>&nbsp; Testimonials
+        <mat-icon>format_quote</mat-icon>&nbsp; Reviews
       </ng-template>
       <div class="tab-content">
         <div class="section-header-row">
@@ -208,8 +381,6 @@
             <mat-icon>add</mat-icon> Add Testimonial
           </button>
         </div>
-
-        <!-- Rating -->
         <mat-card class="inline-form-card rating-card">
           <h4>Rating Display</h4>
           <form [formGroup]="ratingForm" (ngSubmit)="saveRating()">
@@ -228,8 +399,6 @@
             </div>
           </form>
         </mat-card>
-
-        <!-- Testimonial Form -->
         <mat-card class="inline-form-card" *ngIf="editingTestimonial !== undefined && (editingTestimonial || testimonialForm.dirty)">
           <form [formGroup]="testimonialForm" (ngSubmit)="saveTestimonial()">
             <mat-form-field appearance="outline" class="full-width">
@@ -258,8 +427,6 @@
             </div>
           </form>
         </mat-card>
-
-        <!-- Testimonials List -->
         <div class="items-list">
           <div class="list-item testimonial-item" *ngFor="let t of testimonials">
             <div class="item-content">
@@ -271,12 +438,8 @@
               </div>
             </div>
             <div class="item-actions">
-              <button mat-icon-button (click)="editTestimonial(t)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button (click)="deleteTestimonial(t)" matTooltip="Delete" color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
+              <button mat-icon-button (click)="editTestimonial(t)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteTestimonial(t)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
             </div>
           </div>
         </div>
@@ -298,8 +461,6 @@
             <mat-icon>add</mat-icon> Add FAQ
           </button>
         </div>
-
-        <!-- FAQ Form -->
         <mat-card class="inline-form-card" *ngIf="editingFaq !== undefined && (editingFaq || faqForm.dirty)">
           <form [formGroup]="faqForm" (ngSubmit)="saveFaq()">
             <mat-form-field appearance="outline" class="full-width">
@@ -318,8 +479,6 @@
             </div>
           </form>
         </mat-card>
-
-        <!-- FAQ List -->
         <div class="items-list">
           <div class="list-item faq-item" *ngFor="let faq of faqs; let i = index">
             <div class="item-content">
@@ -330,12 +489,8 @@
               </div>
             </div>
             <div class="item-actions">
-              <button mat-icon-button (click)="editFaq(faq)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button (click)="deleteFaq(faq)" matTooltip="Delete" color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
+              <button mat-icon-button (click)="editFaq(faq)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteFaq(faq)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
             </div>
           </div>
         </div>
@@ -357,8 +512,6 @@
             <mat-icon>add</mat-icon> Add Image
           </button>
         </div>
-
-        <!-- Gallery Form -->
         <mat-card class="inline-form-card" *ngIf="editingGallery !== undefined && (editingGallery || galleryForm.dirty)">
           <form [formGroup]="galleryForm" (ngSubmit)="saveGalleryImage()">
             <mat-form-field appearance="outline" class="full-width">
@@ -380,18 +533,12 @@
             </div>
           </form>
         </mat-card>
-
-        <!-- Gallery Grid -->
         <div class="gallery-grid">
           <div class="gallery-item" *ngFor="let img of gallery">
             <img [src]="img.url" [alt]="img.alt">
             <div class="gallery-item-actions">
-              <button mat-icon-button (click)="editGalleryImage(img)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button (click)="deleteGalleryImage(img)" matTooltip="Delete" color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
+              <button mat-icon-button (click)="editGalleryImage(img)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteGalleryImage(img)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
             </div>
           </div>
         </div>
@@ -413,8 +560,6 @@
             <mat-icon>add</mat-icon> Add Tour
           </button>
         </div>
-
-        <!-- Tour Form -->
         <mat-card class="inline-form-card" *ngIf="editingTour !== undefined && (editingTour || tourForm.dirty)">
           <form [formGroup]="tourForm" (ngSubmit)="saveTour()">
             <div class="form-row">
@@ -446,8 +591,6 @@
             </div>
           </form>
         </mat-card>
-
-        <!-- Tours List -->
         <div class="items-list tour-list">
           <div class="list-item tour-item" *ngFor="let tour of culturalTours">
             <div class="item-content">
@@ -458,12 +601,62 @@
               </div>
             </div>
             <div class="item-actions">
-              <button mat-icon-button (click)="editTour(tour)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
+              <button mat-icon-button (click)="editTour(tour)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteTour(tour)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== TRUST BADGES TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>verified_user</mat-icon>&nbsp; Trust
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Trust Badges</h3>
+            <p class="section-desc">Credibility badges shown on the homepage</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addTrustBadge()">
+            <mat-icon>add</mat-icon> Add Badge
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingTrustBadge !== undefined && (editingTrustBadge || trustBadgeForm.dirty)">
+          <form [formGroup]="trustBadgeForm" (ngSubmit)="saveTrustBadge()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Icon</mat-label>
+                <mat-select formControlName="icon">
+                  <mat-option *ngFor="let icon of materialIcons" [value]="icon">
+                    <mat-icon>{{ icon }}</mat-icon> {{ icon }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Label</mat-label>
+                <input matInput formControlName="label">
+              </mat-form-field>
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelTrustBadgeEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="trustBadgeForm.invalid">
+                {{ editingTrustBadge ? 'Update' : 'Add' }}
               </button>
-              <button mat-icon-button (click)="deleteTour(tour)" matTooltip="Delete" color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let b of trustBadges">
+            <div class="item-content">
+              <mat-icon class="item-icon">{{ b.icon }}</mat-icon>
+              <strong>{{ b.label }}</strong>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editTrustBadge(b)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteTrustBadge(b)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
             </div>
           </div>
         </div>
@@ -483,17 +676,14 @@
             <mat-label>Title</mat-label>
             <input matInput formControlName="title">
           </mat-form-field>
-
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Message</mat-label>
             <textarea matInput formControlName="message" rows="3"></textarea>
           </mat-form-field>
-
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Director / Signoff Name</mat-label>
             <input matInput formControlName="directorName">
           </mat-form-field>
-
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="ctaForm.invalid">
               <mat-icon>save</mat-icon> Save CTA
@@ -510,13 +700,12 @@
       </ng-template>
       <div class="tab-content">
         <h3 class="section-heading">Company Information</h3>
-        <p class="section-desc">Footer details, contact info, and registration</p>
+        <p class="section-desc">Used in footer, contact page, and registration details</p>
         <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" class="editor-form">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Company Name</mat-label>
             <input matInput formControlName="name">
           </mat-form-field>
-
           <div class="form-row">
             <mat-form-field appearance="outline">
               <mat-label>Phone</mat-label>
@@ -527,7 +716,6 @@
               <input matInput formControlName="email">
             </mat-form-field>
           </div>
-
           <div class="form-row">
             <mat-form-field appearance="outline">
               <mat-label>WhatsApp Number</mat-label>
@@ -539,12 +727,10 @@
               <input matInput formControlName="directorName">
             </mat-form-field>
           </div>
-
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Address</mat-label>
             <input matInput formControlName="address">
           </mat-form-field>
-
           <h4 class="subsection-title">Registration Details</h4>
           <div class="form-row triple">
             <mat-form-field appearance="outline">
@@ -560,7 +746,6 @@
               <input matInput formControlName="vat">
             </mat-form-field>
           </div>
-
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="companyForm.invalid">
               <mat-icon>save</mat-icon> Save Company Info
@@ -570,6 +755,500 @@
       </div>
     </mat-tab>
 
+    <!-- ========== FOOTER TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>vertical_align_bottom</mat-icon>&nbsp; Footer
+      </ng-template>
+      <div class="tab-content">
+        <h3 class="section-heading">Footer</h3>
+        <p class="section-desc">Footer tagline and local representatives</p>
+
+        <form [formGroup]="footerTaglineForm" (ngSubmit)="saveFooterTagline()" class="editor-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Footer Tagline</mat-label>
+            <textarea matInput formControlName="tagline" rows="3"></textarea>
+            <mat-hint>Description shown under the company name in the footer</mat-hint>
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="footerTaglineForm.invalid">
+              <mat-icon>save</mat-icon> Save Tagline
+            </button>
+          </div>
+        </form>
+
+        <div class="section-header-row" style="margin-top: 24px;">
+          <div>
+            <h4 class="subsection-title">Local Representatives</h4>
+            <p class="section-desc">Regional contacts shown in footer & contact page</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addRep()">
+            <mat-icon>add</mat-icon> Add Rep
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingRep !== undefined && (editingRep || repForm.dirty)">
+          <form [formGroup]="repForm" (ngSubmit)="saveRep()">
+            <div class="form-row triple">
+              <mat-form-field appearance="outline">
+                <mat-label>Country</mat-label>
+                <input matInput formControlName="country">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email">
+              </mat-form-field>
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelRepEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="repForm.invalid">
+                {{ editingRep ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let rep of representatives">
+            <div class="item-content">
+              <mat-icon class="item-icon">flag</mat-icon>
+              <div>
+                <strong>{{ rep.country }}</strong>
+                <span class="item-label">{{ rep.name }} — {{ rep.email }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editRep(rep)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteRep(rep)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== CONTACT PAGE TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>contact_mail</mat-icon>&nbsp; Contact
+      </ng-template>
+      <div class="tab-content">
+        <h3 class="section-heading">Contact Page</h3>
+        <p class="section-desc">Headings, subtitles, and office hours for the contact page</p>
+
+        <form [formGroup]="contactPageForm" (ngSubmit)="saveContactPage()" class="editor-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Hero Title</mat-label>
+            <input matInput formControlName="heroTitle">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Hero Subtitle</mat-label>
+            <input matInput formControlName="heroSubtitle">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Form Title</mat-label>
+            <input matInput formControlName="formTitle">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Form Subtitle</mat-label>
+            <input matInput formControlName="formSubtitle">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Timezone Display</mat-label>
+            <input matInput formControlName="timezone">
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="contactPageForm.invalid">
+              <mat-icon>save</mat-icon> Save Contact Page
+            </button>
+          </div>
+        </form>
+
+        <div class="section-header-row" style="margin-top: 24px;">
+          <div>
+            <h4 class="subsection-title">Office Hours</h4>
+          </div>
+          <button mat-raised-button color="primary" (click)="addOfficeHour()">
+            <mat-icon>add</mat-icon> Add Hours
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingOfficeHour !== undefined && (editingOfficeHour || officeHourForm.dirty)">
+          <form [formGroup]="officeHourForm" (ngSubmit)="saveOfficeHour()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Days (e.g. "Sunday - Friday")</mat-label>
+                <input matInput formControlName="days">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Hours (e.g. "9:00 AM - 6:00 PM")</mat-label>
+                <input matInput formControlName="hours">
+              </mat-form-field>
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelOfficeHourEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="officeHourForm.invalid">
+                {{ editingOfficeHour ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let oh of officeHours">
+            <div class="item-content">
+              <mat-icon class="item-icon">schedule</mat-icon>
+              <div>
+                <strong>{{ oh.days }}</strong>
+                <span class="item-label">{{ oh.hours }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editOfficeHour(oh)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteOfficeHour(oh)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== ABOUT PAGE TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>info</mat-icon>&nbsp; About
+      </ng-template>
+      <div class="tab-content">
+        <h3 class="section-heading">About Page</h3>
+        <p class="section-desc">Hero, story, and CTA for the About page</p>
+
+        <h4 class="subsection-title">About Hero</h4>
+        <form [formGroup]="aboutHeroForm" (ngSubmit)="saveAboutHero()" class="editor-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Badge (e.g. "Est. 2012")</mat-label>
+            <input matInput formControlName="badge">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Subtitle</mat-label>
+            <textarea matInput formControlName="subtitle" rows="3"></textarea>
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="aboutHeroForm.invalid">
+              <mat-icon>save</mat-icon> Save About Hero
+            </button>
+          </div>
+        </form>
+
+        <h4 class="subsection-title" style="margin-top: 24px;">Our Story</h4>
+        <form [formGroup]="aboutStoryForm" (ngSubmit)="saveAboutStory()" class="editor-form">
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Eyebrow Text</mat-label>
+              <input matInput formControlName="eyebrow">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Years Value (e.g. "12+")</mat-label>
+              <input matInput formControlName="yearsValue">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Years Label</mat-label>
+              <input matInput formControlName="yearsLabel">
+            </mat-form-field>
+          </div>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Story Title</mat-label>
+            <input matInput formControlName="title">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Paragraph 1</mat-label>
+            <textarea matInput formControlName="paragraph1" rows="3"></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Paragraph 2 (optional)</mat-label>
+            <textarea matInput formControlName="paragraph2" rows="3"></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Story Image URL</mat-label>
+            <input matInput formControlName="imageUrl">
+          </mat-form-field>
+          <div class="preview-image" *ngIf="aboutStoryForm.get('imageUrl')?.value">
+            <img [src]="aboutStoryForm.get('imageUrl')?.value" alt="Story preview">
+          </div>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="aboutStoryForm.invalid">
+              <mat-icon>save</mat-icon> Save Story
+            </button>
+          </div>
+        </form>
+
+        <h4 class="subsection-title" style="margin-top: 24px;">About CTA</h4>
+        <form [formGroup]="aboutCtaForm" (ngSubmit)="saveAboutCta()" class="editor-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>CTA Title</mat-label>
+            <input matInput formControlName="title">
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>CTA Subtitle</mat-label>
+            <textarea matInput formControlName="subtitle" rows="2"></textarea>
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="aboutCtaForm.invalid">
+              <mat-icon>save</mat-icon> Save About CTA
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <!-- ========== TEAM TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>groups</mat-icon>&nbsp; Team
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Team Members</h3>
+            <p class="section-desc">Team cards shown on the About page</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addTeamMember()">
+            <mat-icon>add</mat-icon> Add Member
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingTeamMember !== undefined && (editingTeamMember || teamMemberForm.dirty)">
+          <form [formGroup]="teamMemberForm" (ngSubmit)="saveTeamMember()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Initials (e.g. "MB")</mat-label>
+                <input matInput formControlName="initials" maxlength="3">
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Role</mat-label>
+              <input matInput formControlName="role">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="2"></textarea>
+            </mat-form-field>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelTeamMemberEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="teamMemberForm.invalid">
+                {{ editingTeamMember ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let m of teamMembers">
+            <div class="item-content">
+              <div class="testimonial-avatar">{{ m.initials }}</div>
+              <div>
+                <strong>{{ m.name }}</strong>
+                <span class="item-label">{{ m.role }} — {{ m.description }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editTeamMember(m)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteTeamMember(m)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== VALUES TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>favorite</mat-icon>&nbsp; Values
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Core Values</h3>
+            <p class="section-desc">Value cards on the About page</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addValue()">
+            <mat-icon>add</mat-icon> Add Value
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingValue !== undefined && (editingValue || valueForm.dirty)">
+          <form [formGroup]="valueForm" (ngSubmit)="saveValue()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Icon</mat-label>
+                <mat-select formControlName="icon">
+                  <mat-option *ngFor="let icon of materialIcons" [value]="icon">
+                    <mat-icon>{{ icon }}</mat-icon> {{ icon }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Color Theme</mat-label>
+                <mat-select formControlName="colorClass">
+                  <mat-option *ngFor="let c of valueColorOptions" [value]="c.value">{{ c.label }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="2"></textarea>
+            </mat-form-field>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelValueEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="valueForm.invalid">
+                {{ editingValue ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let v of aboutValues">
+            <div class="item-content">
+              <mat-icon class="item-icon">{{ v.icon }}</mat-icon>
+              <div>
+                <strong>{{ v.title }}</strong>
+                <span class="item-label">{{ v.description }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editValue(v)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteValue(v)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== ABOUT WHY US TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>emoji_events</mat-icon>&nbsp; About Why Us
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Why Choose Us (About Page)</h3>
+            <p class="section-desc">"What Sets Us Apart" section on About page</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addAboutWhy()">
+            <mat-icon>add</mat-icon> Add Item
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingAboutWhy !== undefined && (editingAboutWhy || aboutWhyForm.dirty)">
+          <form [formGroup]="aboutWhyForm" (ngSubmit)="saveAboutWhy()">
+            <mat-form-field appearance="outline">
+              <mat-label>Icon</mat-label>
+              <mat-select formControlName="icon">
+                <mat-option *ngFor="let icon of materialIcons" [value]="icon">
+                  <mat-icon>{{ icon }}</mat-icon> {{ icon }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="2"></textarea>
+            </mat-form-field>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelAboutWhyEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="aboutWhyForm.invalid">
+                {{ editingAboutWhy ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let w of aboutWhyChooseUs">
+            <div class="item-content">
+              <mat-icon class="item-icon">{{ w.icon }}</mat-icon>
+              <div>
+                <strong>{{ w.title }}</strong>
+                <span class="item-label">{{ w.description }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editAboutWhy(w)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteAboutWhy(w)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== CERTIFICATIONS TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>workspace_premium</mat-icon>&nbsp; Certs
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Certifications</h3>
+            <p class="section-desc">Certification badges on the About page</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addCert()">
+            <mat-icon>add</mat-icon> Add Certification
+          </button>
+        </div>
+        <mat-card class="inline-form-card" *ngIf="editingCert !== undefined && (editingCert || certForm.dirty)">
+          <form [formGroup]="certForm" (ngSubmit)="saveCert()">
+            <div class="form-row triple">
+              <mat-form-field appearance="outline">
+                <mat-label>Icon</mat-label>
+                <mat-select formControlName="icon">
+                  <mat-option *ngFor="let icon of materialIcons" [value]="icon">
+                    <mat-icon>{{ icon }}</mat-icon> {{ icon }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Label</mat-label>
+                <input matInput formControlName="label">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Value</mat-label>
+                <input matInput formControlName="value">
+              </mat-form-field>
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelCertEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="certForm.invalid">
+                {{ editingCert ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+        <div class="items-list">
+          <div class="list-item" *ngFor="let c of certifications">
+            <div class="item-content">
+              <mat-icon class="item-icon">{{ c.icon }}</mat-icon>
+              <div>
+                <strong>{{ c.label }}</strong>
+                <span class="item-label">{{ c.value }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editCert(c)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+              <button mat-icon-button (click)="deleteCert(c)" matTooltip="Delete" color="warn"><mat-icon>delete</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
   </mat-tab-group>
 </div>
-
