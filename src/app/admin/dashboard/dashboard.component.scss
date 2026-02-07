@@ -1,9 +1,17 @@
-$accent-cyan: #0ea5e9;
-$accent-teal: #14b8a6;
-$accent-purple: #8b5cf6;
-$accent-orange: #f97316;
-$text-dark: #0f172a;
-$text-light: #64748b;
+// ===== Himalayan Dawn Theme - Admin Dashboard =====
+$color-mountain-deep: #1e3a5f;
+$color-primary: #2563eb;
+$color-primary-light: #3b82f6;
+$color-accent: #ea580c;
+$color-gold: #d97706;
+$color-success: #22c55e;
+$color-charcoal: #1e293b;
+$color-slate: #475569;
+$color-mist: #94a3b8;
+$color-cloud: #e2e8f0;
+$color-fog: #f1f5f9;
+$color-snow: #f8fafc;
+$color-white: #ffffff;
 
 .admin-dashboard {
   padding: 28px;
@@ -18,12 +26,12 @@ $text-light: #64748b;
     margin: 0 0 6px;
     font-size: 2rem;
     font-weight: 800;
-    color: $text-dark;
+    color: $color-charcoal;
   }
 
   .subtitle {
     margin: 0;
-    color: $text-light;
+    color: $color-slate;
     font-size: 1.05rem;
   }
 }
@@ -45,7 +53,7 @@ $text-light: #64748b;
 }
 
 .stat-card {
-  background: #fff;
+  background: $color-white;
   border-radius: 16px;
   padding: 24px;
   display: flex;
@@ -53,12 +61,12 @@ $text-light: #64748b;
   gap: 18px;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
+  border: 1px solid $color-cloud;
   position: relative;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 30px rgba(30, 58, 95, 0.1);
   }
 
   .stat-icon {
@@ -74,13 +82,13 @@ $text-light: #64748b;
       font-size: 28px;
       width: 28px;
       height: 28px;
-      color: #fff;
+      color: $color-white;
     }
 
-    &.cyan { background: linear-gradient(135deg, $accent-cyan, lighten($accent-cyan, 10%)); }
-    &.teal { background: linear-gradient(135deg, $accent-teal, lighten($accent-teal, 10%)); }
-    &.purple { background: linear-gradient(135deg, $accent-purple, lighten($accent-purple, 10%)); }
-    &.orange { background: linear-gradient(135deg, $accent-orange, lighten($accent-orange, 10%)); }
+    &.cyan { background: linear-gradient(135deg, $color-primary, $color-primary-light); }
+    &.teal { background: linear-gradient(135deg, $color-success, lighten($color-success, 10%)); }
+    &.purple { background: linear-gradient(135deg, $color-mountain-deep, $color-primary); }
+    &.orange { background: linear-gradient(135deg, $color-accent, $color-gold); }
   }
 
   .stat-info {
@@ -90,13 +98,13 @@ $text-light: #64748b;
     .stat-number {
       font-size: 2rem;
       font-weight: 800;
-      color: $text-dark;
+      color: $color-charcoal;
       line-height: 1;
     }
 
     .stat-label {
       font-size: 0.9rem;
-      color: $text-light;
+      color: $color-slate;
       margin-top: 4px;
     }
   }
@@ -105,8 +113,8 @@ $text-light: #64748b;
     position: absolute;
     top: 12px;
     right: 12px;
-    background: #fef3c7;
-    color: #d97706;
+    background: rgba(217, 119, 6, 0.12);
+    color: $color-gold;
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 0.75rem;
@@ -132,7 +140,7 @@ $text-light: #64748b;
     mat-card-title {
       font-size: 1.2rem;
       font-weight: 700;
-      color: $text-dark;
+      color: $color-charcoal;
     }
   }
 }
@@ -148,17 +156,17 @@ $text-light: #64748b;
     padding: 12px 18px;
     border-radius: 12px;
     font-weight: 500;
-    color: $text-dark;
-    border-color: #e2e8f0;
+    color: $color-charcoal;
+    border-color: $color-cloud;
     transition: all 0.2s ease;
 
     mat-icon {
-      color: $accent-cyan;
+      color: $color-primary;
     }
 
     &:hover {
-      background: rgba(14, 165, 233, 0.05);
-      border-color: $accent-cyan;
+      background: rgba(37, 99, 235, 0.05);
+      border-color: $color-primary;
     }
   }
 }
@@ -175,42 +183,42 @@ $text-light: #64748b;
   justify-content: space-between;
   padding: 14px 16px;
   border-radius: 12px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: $color-snow;
+  border: 1px solid $color-cloud;
 
   .booking-info {
     display: flex;
     flex-direction: column;
 
     strong {
-      color: $text-dark;
+      color: $color-charcoal;
       font-size: 0.95rem;
     }
 
     .booking-trek {
-      color: $text-light;
+      color: $color-slate;
       font-size: 0.85rem;
       margin-top: 2px;
     }
   }
 
   .status-pending {
-    background: #fef3c7 !important;
-    color: #d97706 !important;
+    background: rgba(217, 119, 6, 0.12) !important;
+    color: $color-gold !important;
   }
 
   .status-confirmed {
-    background: #d1fae5 !important;
-    color: #059669 !important;
+    background: rgba(34, 197, 94, 0.12) !important;
+    color: darken($color-success, 8%) !important;
   }
 
   .status-completed {
-    background: #dbeafe !important;
-    color: #2563eb !important;
+    background: rgba(37, 99, 235, 0.1) !important;
+    color: $color-primary !important;
   }
 
   .status-cancelled {
-    background: #fee2e2 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
     color: #dc2626 !important;
   }
 }
@@ -218,7 +226,7 @@ $text-light: #64748b;
 .empty-state {
   text-align: center;
   padding: 40px 20px;
-  color: $text-light;
+  color: $color-slate;
 
   mat-icon {
     font-size: 48px;
@@ -233,4 +241,3 @@ $text-light: #64748b;
     font-size: 0.95rem;
   }
 }
-

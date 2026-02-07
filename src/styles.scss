@@ -1,50 +1,157 @@
-/* AirPlus Nepal - Global Styles - Bright Theme */
+/* ========================================
+   AIRPLUS NEPAL - HIMALAYAN DAWN THEME
+   Premium Nepal Adventure Design System
+   ======================================== */
+
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-// Variables - Bright Theme
-$light-bg: #f8fafc;
-$white: #ffffff;
-$card-bg: #ffffff;
-$accent-cyan: #0ea5e9;
-$accent-teal: #14b8a6;
-$accent-purple: #8b5cf6;
-$accent-pink: #ec4899;
-$accent-orange: #f97316;
-$text-primary: #0f172a;
-$text-secondary: #475569;
-$text-muted: #94a3b8;
+// ========================================
+// COLOR PALETTE - Himalayan Dawn
+// ========================================
 
-// Smooth scrolling
+// Primary - Mountains & Adventure
+$color-mountain-deep: #1e3a5f;
+$color-primary: #2563eb;
+$color-primary-light: #3b82f6;
+$color-primary-dark: #1d4ed8;
+
+// Accent - Nepali Culture & Warmth
+$color-accent: #ea580c;
+$color-accent-light: #f97316;
+$color-accent-dark: #c2410c;
+$color-gold: #d97706;
+$color-prayer-red: #dc2626;
+
+// Nature & Success
+$color-forest: #15803d;
+$color-success: #22c55e;
+$color-rhododendron: #be185d;
+
+// Neutrals - Mountain Mist
+$color-charcoal: #1e293b;
+$color-slate: #475569;
+$color-stone: #64748b;
+$color-mist: #94a3b8;
+$color-cloud: #e2e8f0;
+$color-fog: #f1f5f9;
+$color-snow: #f8fafc;
+$color-white: #ffffff;
+
+// Semantic Colors
+$color-error: #ef4444;
+$color-warning: #f59e0b;
+$color-info: #3b82f6;
+
+// ========================================
+// TYPOGRAPHY
+// ========================================
+$font-heading: 'Poppins', 'Inter', sans-serif;
+$font-body: 'Inter', 'Roboto', sans-serif;
+
+// ========================================
+// GRADIENTS - Himalayan Sunrise
+// ========================================
+$gradient-himalayan: linear-gradient(135deg, $color-mountain-deep 0%, $color-primary 100%);
+$gradient-sunrise: linear-gradient(135deg, $color-accent 0%, $color-gold 100%);
+$gradient-adventure: linear-gradient(135deg, $color-mountain-deep 0%, $color-accent 100%);
+$gradient-hero-overlay: linear-gradient(180deg, rgba(30, 58, 95, 0.7) 0%, rgba(30, 58, 95, 0.9) 100%);
+$gradient-warm-overlay: linear-gradient(135deg, rgba(234, 88, 12, 0.85) 0%, rgba(217, 119, 6, 0.75) 100%);
+
+// ========================================
+// SHADOWS - Elevation System
+// ========================================
+$shadow-xs: 0 1px 2px rgba(30, 58, 95, 0.05);
+$shadow-sm: 0 2px 4px rgba(30, 58, 95, 0.06);
+$shadow-md: 0 4px 12px rgba(30, 58, 95, 0.08);
+$shadow-lg: 0 8px 24px rgba(30, 58, 95, 0.1);
+$shadow-xl: 0 16px 48px rgba(30, 58, 95, 0.12);
+$shadow-2xl: 0 24px 64px rgba(30, 58, 95, 0.15);
+
+// Colored Shadows
+$shadow-primary: 0 4px 20px rgba(37, 99, 235, 0.35);
+$shadow-primary-hover: 0 8px 30px rgba(37, 99, 235, 0.45);
+$shadow-accent: 0 4px 20px rgba(234, 88, 12, 0.35);
+$shadow-accent-hover: 0 8px 30px rgba(234, 88, 12, 0.45);
+
+// ========================================
+// SPACING SCALE
+// ========================================
+$space-1: 0.25rem;   // 4px
+$space-2: 0.5rem;    // 8px
+$space-3: 0.75rem;   // 12px
+$space-4: 1rem;      // 16px
+$space-5: 1.25rem;   // 20px
+$space-6: 1.5rem;    // 24px
+$space-8: 2rem;      // 32px
+$space-10: 2.5rem;   // 40px
+$space-12: 3rem;     // 48px
+$space-16: 4rem;     // 64px
+$space-20: 5rem;     // 80px
+
+// ========================================
+// BORDER RADIUS
+// ========================================
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+$radius-2xl: 24px;
+$radius-full: 50px;
+
+// ========================================
+// BREAKPOINTS
+// ========================================
+$bp-xs: 480px;
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1200px;
+
+// ========================================
+// BASE STYLES
+// ========================================
+
 html {
   scroll-behavior: smooth;
 }
 
 html, body {
   height: 100%;
-  background-color: $light-bg;
-  color: $text-primary;
+  background-color: $color-snow;
+  color: $color-charcoal;
 }
 
 body {
   margin: 0;
-  font-family: 'Inter', 'Roboto', 'Helvetica Neue', sans-serif;
+  font-family: $font-body;
   padding-top: 70px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
 * {
   box-sizing: border-box;
 }
 
-// Container
+// Headings use Poppins
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  font-weight: 700;
+  color: $color-charcoal;
+  line-height: 1.2;
+}
+
+// ========================================
+// LAYOUT UTILITIES
+// ========================================
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 $space-5;
 }
 
-// Utilities
 .spacer {
   flex: 1 1 auto;
 }
@@ -57,163 +164,379 @@ body {
   text-align: center;
 }
 
-.mt-1 { margin-top: 8px; }
-.mt-2 { margin-top: 16px; }
-.mt-3 { margin-top: 24px; }
-.mt-4 { margin-top: 32px; }
+// Margin utilities
+.mt-1 { margin-top: $space-2; }
+.mt-2 { margin-top: $space-4; }
+.mt-3 { margin-top: $space-6; }
+.mt-4 { margin-top: $space-8; }
 
-.mb-1 { margin-bottom: 8px; }
-.mb-2 { margin-bottom: 16px; }
-.mb-3 { margin-bottom: 24px; }
-.mb-4 { margin-bottom: 32px; }
+.mb-1 { margin-bottom: $space-2; }
+.mb-2 { margin-bottom: $space-4; }
+.mb-3 { margin-bottom: $space-6; }
+.mb-4 { margin-bottom: $space-8; }
 
-.p-1 { padding: 8px; }
-.p-2 { padding: 16px; }
-.p-3 { padding: 24px; }
-.p-4 { padding: 32px; }
+// Padding utilities
+.p-1 { padding: $space-2; }
+.p-2 { padding: $space-4; }
+.p-3 { padding: $space-6; }
+.p-4 { padding: $space-8; }
 
-// Material Card Override
+// ========================================
+// MATERIAL CARD OVERRIDE
+// ========================================
+
 .mat-mdc-card {
-  background: $white !important;
-  color: $text-primary !important;
-  margin-bottom: 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  background: $color-white !important;
+  color: $color-charcoal !important;
+  margin-bottom: $space-4;
+  border: 1px solid $color-cloud;
+  border-radius: $radius-xl !important;
+  box-shadow: $shadow-md !important;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: $shadow-lg !important;
+  }
 }
 
-// Material Button Override
+// ========================================
+// MATERIAL BUTTON OVERRIDES
+// ========================================
+
+// Primary button - Saffron Sunrise gradient
 .mat-mdc-raised-button.mat-primary {
-  background: linear-gradient(135deg, $accent-cyan, $accent-teal) !important;
-  color: #fff !important;
-  border-radius: 50px !important;
+  background: $gradient-sunrise !important;
+  color: $color-white !important;
+  border-radius: $radius-full !important;
+  font-family: $font-heading !important;
   font-weight: 600 !important;
-  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4) !important;
+  box-shadow: $shadow-accent !important;
+  transition: all 0.3s ease !important;
+  text-transform: none;
+  letter-spacing: 0.3px;
+
+  &:hover {
+    box-shadow: $shadow-accent-hover !important;
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Accent/Secondary button - Mountain Blue gradient
+.mat-mdc-raised-button.mat-accent {
+  background: $gradient-himalayan !important;
+  color: $color-white !important;
+  border-radius: $radius-full !important;
+  font-family: $font-heading !important;
+  font-weight: 600 !important;
+  box-shadow: $shadow-primary !important;
   transition: all 0.3s ease !important;
 
   &:hover {
-    box-shadow: 0 8px 30px rgba(14, 165, 233, 0.5) !important;
+    box-shadow: $shadow-primary-hover !important;
     transform: translateY(-2px);
+  }
+}
+
+// Outline button
+.mat-mdc-outlined-button {
+  border-color: $color-primary !important;
+  color: $color-primary !important;
+  border-radius: $radius-full !important;
+  font-family: $font-heading !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+
+  &:hover {
+    background: rgba($color-primary, 0.08) !important;
   }
 }
 
 .mat-mdc-button {
   transition: all 0.3s ease !important;
+  font-family: $font-heading !important;
 }
 
-// Material Spinner
+// ========================================
+// MATERIAL SPINNER
+// ========================================
+
 .mat-mdc-progress-spinner circle {
-  stroke: $accent-cyan !important;
+  stroke: $color-accent !important;
 }
 
-// Material Snackbar
+// ========================================
+// MATERIAL SNACKBAR
+// ========================================
+
 .mat-mdc-snack-bar-container {
-  background: $white !important;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  background: $color-white !important;
+  border: 1px solid $color-cloud;
+  border-radius: $radius-md !important;
+  box-shadow: $shadow-xl !important;
 
   .mdc-snackbar__surface {
     background: transparent !important;
   }
 
   .mdc-snackbar__label {
-    color: $text-primary !important;
+    color: $color-charcoal !important;
+    font-family: $font-body !important;
   }
 
   .mat-mdc-button {
-    color: $accent-cyan !important;
+    color: $color-primary !important;
+    font-weight: 600 !important;
   }
 }
 
-// Scrollbar Styling
+// ========================================
+// SCROLLBAR STYLING
+// ========================================
+
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: $color-fog;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, $accent-cyan, $accent-teal);
+  background: $gradient-himalayan;
   border-radius: 5px;
 
   &:hover {
-    background: linear-gradient(180deg, darken($accent-cyan, 10%), darken($accent-teal, 10%));
+    background: linear-gradient(180deg, darken($color-mountain-deep, 5%), darken($color-primary, 5%));
   }
 }
 
-// Messages
+// ========================================
+// MESSAGES
+// ========================================
+
 .error-message {
-  color: #ef4444;
+  color: $color-error;
   font-size: 14px;
-  margin-top: 8px;
+  margin-top: $space-2;
+  font-weight: 500;
 }
 
 .success-message {
-  color: #22c55e;
+  color: $color-success;
   font-size: 14px;
-  margin-top: 8px;
+  margin-top: $space-2;
+  font-weight: 500;
 }
 
-// Links
+// ========================================
+// LINKS
+// ========================================
+
 a {
-  color: $accent-cyan;
+  color: $color-primary;
   text-decoration: none;
   transition: all 0.3s ease;
 
   &:hover {
-    color: darken($accent-cyan, 10%);
+    color: $color-primary-dark;
   }
 }
 
-// Selection
+// ========================================
+// SELECTION
+// ========================================
+
 ::selection {
-  background: rgba(14, 165, 233, 0.2);
-  color: $text-primary;
+  background: rgba($color-primary, 0.2);
+  color: $color-charcoal;
 }
 
-// Focus outline
+// ========================================
+// FOCUS STATES (Accessibility)
+// ========================================
+
 :focus-visible {
-  outline: 2px solid $accent-cyan;
+  outline: 2px solid $color-primary;
   outline-offset: 2px;
 }
 
-// Material Form Field Global Overrides
+// ========================================
+// MATERIAL FORM FIELD
+// ========================================
+
 .mat-mdc-form-field {
+  font-family: $font-body !important;
+
   .mdc-text-field--outlined {
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing {
-      border-color: #cbd5e1 !important;
+      border-color: $color-cloud !important;
+    }
+
+    &:hover {
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__notch,
+      .mdc-notched-outline__trailing {
+        border-color: $color-mist !important;
+      }
+    }
+  }
+
+  &.mat-focused {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: $color-primary !important;
     }
   }
 }
 
-// Material Menu
+// ========================================
+// MATERIAL MENU
+// ========================================
+
 .mat-mdc-menu-panel {
-  background: $white !important;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12) !important;
+  background: $color-white !important;
+  border: 1px solid $color-cloud;
+  border-radius: $radius-md !important;
+  box-shadow: $shadow-xl !important;
 
   .mat-mdc-menu-item {
-    color: $text-secondary !important;
+    color: $color-slate !important;
+    font-family: $font-body !important;
     transition: all 0.2s ease;
 
     &:hover {
-      background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(20, 184, 166, 0.1)) !important;
-      color: $text-primary !important;
+      background: linear-gradient(135deg, rgba($color-primary, 0.08), rgba($color-accent, 0.05)) !important;
+      color: $color-charcoal !important;
     }
 
     .mat-icon {
-      color: $accent-cyan !important;
+      color: $color-primary !important;
     }
   }
 }
 
-// Material Divider
+// ========================================
+// MATERIAL DIVIDER
+// ========================================
+
 .mat-divider {
-  border-color: #e2e8f0 !important;
+  border-color: $color-cloud !important;
+}
+
+// ========================================
+// MATERIAL TABS
+// ========================================
+
+.mat-mdc-tab-group {
+  .mat-mdc-tab {
+    font-family: $font-heading !important;
+    font-weight: 500 !important;
+
+    &.mdc-tab--active {
+      color: $color-primary !important;
+    }
+  }
+
+  .mdc-tab-indicator__content--underline {
+    border-color: $color-primary !important;
+  }
+}
+
+// ========================================
+// MATERIAL CHIPS
+// ========================================
+
+.mat-mdc-chip {
+  font-family: $font-body !important;
+
+  &.mat-mdc-chip-selected {
+    background: $gradient-sunrise !important;
+    color: $color-white !important;
+  }
+}
+
+// ========================================
+// MATERIAL TABLE
+// ========================================
+
+.mat-mdc-table {
+  background: $color-white !important;
+  border-radius: $radius-lg !important;
+  overflow: hidden;
+
+  .mat-mdc-header-row {
+    background: $color-fog !important;
+
+    .mat-mdc-header-cell {
+      color: $color-charcoal !important;
+      font-family: $font-heading !important;
+      font-weight: 600 !important;
+      border-bottom-color: $color-cloud !important;
+    }
+  }
+
+  .mat-mdc-row {
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba($color-primary, 0.04) !important;
+    }
+
+    .mat-mdc-cell {
+      color: $color-slate !important;
+      border-bottom-color: $color-cloud !important;
+    }
+  }
+}
+
+// ========================================
+// MATERIAL DIALOG
+// ========================================
+
+.mat-mdc-dialog-container {
+  border-radius: $radius-xl !important;
+
+  .mat-mdc-dialog-surface {
+    border-radius: $radius-xl !important;
+  }
+}
+
+// ========================================
+// UTILITY CLASSES - Colors
+// ========================================
+
+.text-primary { color: $color-primary !important; }
+.text-accent { color: $color-accent !important; }
+.text-success { color: $color-success !important; }
+.text-error { color: $color-error !important; }
+.text-muted { color: $color-mist !important; }
+
+.bg-primary { background-color: $color-primary !important; }
+.bg-accent { background-color: $color-accent !important; }
+.bg-snow { background-color: $color-snow !important; }
+.bg-white { background-color: $color-white !important; }
+
+// ========================================
+// GRADIENT TEXT UTILITY
+// ========================================
+
+.gradient-text {
+  background: $gradient-sunrise;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-blue {
+  background: $gradient-himalayan;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

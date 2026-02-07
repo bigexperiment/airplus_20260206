@@ -1,19 +1,24 @@
-// ===== Variables =====
-$white: #ffffff;
-$bg: #f9fafb;
-$cyan: #0ea5e9;
-$teal: #14b8a6;
-$dark: #0f172a;
-$mid: #334155;
-$light: #64748b;
-$muted: #94a3b8;
-$border: #e2e8f0;
+// ===== Himalayan Dawn Theme - Home =====
+$color-mountain-deep: #1e3a5f;
+$color-primary: #2563eb;
+$color-primary-light: #3b82f6;
+$color-accent: #ea580c;
+$color-gold: #d97706;
+$color-charcoal: #1e293b;
+$color-slate: #475569;
+$color-stone: #64748b;
+$color-mist: #94a3b8;
+$color-cloud: #e2e8f0;
+$color-fog: #f1f5f9;
+$color-snow: #f8fafc;
+$color-white: #ffffff;
+$color-success: #22c55e;
 $radius: 16px;
 
 // ===== Page =====
 .home-page {
-  background: $bg;
-  color: $dark;
+  background: $color-snow;
+  color: $color-charcoal;
 }
 
 // ===== Hero =====
@@ -37,7 +42,7 @@ $radius: 16px;
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.75) 100%);
+    background: linear-gradient(180deg, rgba(30, 58, 95, 0.6) 0%, rgba(30, 58, 95, 0.85) 100%);
   }
 }
 
@@ -50,7 +55,7 @@ $radius: 16px;
   h1 {
     font-size: 3.4rem;
     font-weight: 800;
-    color: $white;
+    color: $color-white;
     margin: 0 0 16px;
     line-height: 1.15;
     letter-spacing: -1px;
@@ -72,34 +77,34 @@ $radius: 16px;
 }
 
 .btn-primary {
-  background: $white !important;
-  color: $dark !important;
+  background: linear-gradient(135deg, $color-accent, $color-gold) !important;
+  color: $color-white !important;
   font-weight: 700 !important;
   padding: 12px 32px !important;
   border-radius: 50px !important;
   font-size: 0.95rem !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(234, 88, 12, 0.35) !important;
 
   mat-icon { margin-left: 4px; font-size: 20px; width: 20px; height: 20px; }
-  &:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2) !important; }
+  &:hover { transform: translateY(-2px) !important; box-shadow: 0 8px 30px rgba(234, 88, 12, 0.45) !important; }
 }
 
 .btn-outline {
   border: 2px solid rgba(255, 255, 255, 0.6) !important;
-  color: $white !important;
+  color: $color-white !important;
   padding: 12px 32px !important;
   border-radius: 50px !important;
   font-size: 0.95rem !important;
   font-weight: 600 !important;
 
-  &:hover { background: rgba(255, 255, 255, 0.12) !important; border-color: $white !important; }
+  &:hover { background: rgba(255, 255, 255, 0.12) !important; border-color: $color-white !important; }
 }
 
 // ===== Trust Strip =====
 .trust-strip {
-  background: $white;
-  border-bottom: 1px solid $border;
+  background: $color-white;
+  border-bottom: 1px solid $color-cloud;
   padding: 20px 0;
 }
 
@@ -115,7 +120,7 @@ $radius: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
-  color: $muted;
+  color: $color-mist;
   font-size: 0.85rem;
   font-weight: 600;
 
@@ -123,7 +128,7 @@ $radius: 16px;
     font-size: 20px;
     width: 20px;
     height: 20px;
-    color: $teal;
+    color: $color-gold;
   }
 }
 
@@ -142,11 +147,11 @@ $radius: 16px;
   padding: 80px 0;
 
   &.alt {
-    background: $white;
+    background: $color-white;
   }
 
   &.testimonials {
-    background: $dark;
+    background: $color-mountain-deep;
   }
 }
 
@@ -154,15 +159,15 @@ $radius: 16px;
   text-align: center;
   font-size: 2rem;
   font-weight: 800;
-  color: $dark;
+  color: $color-charcoal;
   margin: 0 0 8px;
 
-  &.light { color: $white; }
+  &.light { color: $color-white; }
 }
 
 .section-sub {
   text-align: center;
-  color: $light;
+  color: $color-stone;
   font-size: 1rem;
   margin: 0 0 44px;
 }
@@ -173,14 +178,18 @@ $radius: 16px;
 }
 
 .btn-text {
-  color: $cyan !important;
+  color: $color-primary !important;
   font-weight: 600 !important;
   font-size: 0.95rem !important;
-  border-color: $cyan !important;
+  border-color: $color-primary !important;
   border-radius: 50px !important;
   padding: 10px 28px !important;
 
   mat-icon { margin-left: 4px; font-size: 18px; width: 18px; height: 18px; }
+
+  &:hover {
+    background: rgba(37, 99, 235, 0.08) !important;
+  }
 }
 
 .loading {
@@ -201,16 +210,17 @@ $radius: 16px;
 }
 
 .trek-card {
-  background: $white;
+  background: $color-white;
   border-radius: $radius;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  border: 1px solid $border;
+  border: 1px solid $color-cloud;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 36px rgba(30, 58, 95, 0.12);
+    border-color: rgba(37, 99, 235, 0.2);
 
     .trek-img img { transform: scale(1.04); }
   }
@@ -231,11 +241,11 @@ $radius: 16px;
       position: absolute;
       top: 12px;
       right: 12px;
-      background: $white;
+      background: $color-white;
       padding: 5px 14px;
       border-radius: 50px;
       font-size: 0.75rem;
-      color: $cyan;
+      color: $color-primary;
       font-weight: 600;
     }
   }
@@ -246,12 +256,12 @@ $radius: 16px;
     h3 {
       font-size: 1.2rem;
       font-weight: 700;
-      color: $dark;
+      color: $color-charcoal;
       margin: 0 0 8px;
     }
 
     > p {
-      color: $light;
+      color: $color-stone;
       font-size: 0.9rem;
       line-height: 1.6;
       margin: 0 0 14px;
@@ -266,13 +276,13 @@ $radius: 16px;
       align-items: center;
       justify-content: space-between;
       padding-top: 14px;
-      border-top: 1px solid $border;
+      border-top: 1px solid $color-cloud;
 
       span {
         display: flex;
         align-items: center;
         gap: 4px;
-        color: $muted;
+        color: $color-mist;
         font-size: 0.85rem;
         font-weight: 500;
 
@@ -280,14 +290,14 @@ $radius: 16px;
           font-size: 18px;
           width: 18px;
           height: 18px;
-          color: $teal;
+          color: $color-primary;
         }
       }
 
       .trek-price {
         font-size: 1.1rem;
         font-weight: 700;
-        color: $cyan;
+        color: $color-accent;
       }
     }
   }
@@ -307,32 +317,32 @@ $radius: 16px;
   text-align: center;
   padding: 36px 24px;
   border-radius: $radius;
-  background: $bg;
-  border: 1px solid $border;
+  background: $color-snow;
+  border: 1px solid $color-cloud;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 12px 36px rgba(30, 58, 95, 0.08);
   }
 
   mat-icon {
     font-size: 32px;
     width: 32px;
     height: 32px;
-    color: $cyan;
+    color: $color-primary;
     margin-bottom: 16px;
   }
 
   h4 {
     font-size: 1.05rem;
     font-weight: 700;
-    color: $dark;
+    color: $color-charcoal;
     margin: 0 0 8px;
   }
 
   p {
-    color: $light;
+    color: $color-stone;
     font-size: 0.88rem;
     line-height: 1.65;
     margin: 0;
@@ -372,19 +382,19 @@ $radius: 16px;
       width: 42px;
       height: 42px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.12);
+      background: linear-gradient(135deg, $color-accent, $color-gold);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
       font-size: 0.85rem;
-      color: $white;
+      color: $color-white;
       flex-shrink: 0;
     }
 
     strong {
       display: block;
-      color: $white;
+      color: $color-white;
       font-size: 0.92rem;
     }
 
@@ -398,21 +408,21 @@ $radius: 16px;
 // ===== FAQ =====
 mat-accordion {
   mat-expansion-panel {
-    background: $white !important;
+    background: $color-white !important;
     margin-bottom: 10px !important;
     border-radius: 12px !important;
-    border: 1px solid $border !important;
+    border: 1px solid $color-cloud !important;
     box-shadow: none !important;
 
     &.mat-expanded {
-      border-color: $cyan !important;
+      border-color: $color-primary !important;
     }
 
     mat-expansion-panel-header {
       padding: 18px 22px !important;
 
       mat-panel-title {
-        color: $dark;
+        color: $color-charcoal;
         font-size: 0.98rem;
         font-weight: 600;
       }
@@ -425,7 +435,7 @@ mat-accordion {
 }
 
 .faq-answer {
-  color: $light;
+  color: $color-stone;
   line-height: 1.7;
   font-size: 0.92rem;
   margin: 0;
@@ -434,13 +444,13 @@ mat-accordion {
 // ===== CTA =====
 .cta {
   padding: 80px 0;
-  background: linear-gradient(135deg, $cyan, $teal);
+  background: linear-gradient(135deg, $color-mountain-deep 0%, $color-primary 50%, $color-accent 100%);
   text-align: center;
 
   h2 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: $white;
+    color: $color-white;
     margin: 0 0 12px;
   }
 
@@ -454,8 +464,13 @@ mat-accordion {
   }
 
   .btn-primary {
-    background: $white !important;
-    color: $cyan !important;
+    background: $color-white !important;
+    color: $color-mountain-deep !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+
+    &:hover {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25) !important;
+    }
   }
 }
 

@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(open:*)",
-      "WebFetch(domain:www.airplusnepal.com)"
+      "WebFetch(domain:www.airplusnepal.com)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(ng build:*)"
     ]
   }
 }

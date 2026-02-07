@@ -1,17 +1,21 @@
-$white: #ffffff;
-$bg: #f9fafb;
-$cyan: #0ea5e9;
-$teal: #14b8a6;
-$dark: #0f172a;
-$mid: #334155;
-$light: #64748b;
-$muted: #94a3b8;
-$border: #e2e8f0;
+// ===== Himalayan Dawn Theme - About =====
+$color-mountain-deep: #1e3a5f;
+$color-primary: #2563eb;
+$color-accent: #ea580c;
+$color-gold: #d97706;
+$color-charcoal: #1e293b;
+$color-slate: #475569;
+$color-stone: #64748b;
+$color-mist: #94a3b8;
+$color-cloud: #e2e8f0;
+$color-fog: #f1f5f9;
+$color-snow: #f8fafc;
+$color-white: #ffffff;
 $radius: 16px;
 
 .about-page {
   min-height: 100vh;
-  background: $bg;
+  background: $color-snow;
 }
 
 .container {
@@ -23,14 +27,14 @@ $radius: 16px;
 .section {
   padding: 80px 0;
 
-  &.alt { background: $white; }
+  &.alt { background: $color-white; }
 }
 
 .section-heading {
   text-align: center;
   font-size: 2rem;
   font-weight: 800;
-  color: $dark;
+  color: $color-charcoal;
   margin: 0 0 44px;
 }
 
@@ -40,7 +44,7 @@ $radius: 16px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: $cyan;
+  color: $color-accent;
   margin-bottom: 10px;
 }
 
@@ -58,7 +62,7 @@ $radius: 16px;
 .hero-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.8)),
+  background: linear-gradient(180deg, rgba(30, 58, 95, 0.6), rgba(30, 58, 95, 0.85)),
               url('https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?w=1600') center/cover;
 }
 
@@ -71,7 +75,7 @@ $radius: 16px;
   h1 {
     font-size: 2.8rem;
     font-weight: 800;
-    color: $white;
+    color: $color-white;
     margin: 0 0 14px;
     line-height: 1.15;
   }
@@ -113,23 +117,23 @@ $radius: 16px;
     position: absolute;
     bottom: 20px;
     right: 20px;
-    background: $white;
+    background: $color-white;
     border-radius: 12px;
     padding: 14px 20px;
     text-align: center;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 24px rgba(30, 58, 95, 0.15);
 
     strong {
       display: block;
       font-size: 1.6rem;
       font-weight: 800;
-      color: $cyan;
+      color: $color-accent;
       line-height: 1;
     }
 
     span {
       font-size: 0.75rem;
-      color: $muted;
+      color: $color-mist;
       font-weight: 600;
     }
   }
@@ -139,7 +143,7 @@ $radius: 16px;
   h2 {
     font-size: 2rem;
     font-weight: 800;
-    color: $dark;
+    color: $color-charcoal;
     margin: 0 0 16px;
     line-height: 1.2;
   }
@@ -147,7 +151,7 @@ $radius: 16px;
   p {
     font-size: 0.98rem;
     line-height: 1.75;
-    color: $light;
+    color: $color-stone;
     margin: 0 0 12px;
   }
 
@@ -156,7 +160,7 @@ $radius: 16px;
     gap: 28px;
     margin-top: 24px;
     padding-top: 24px;
-    border-top: 1px solid $border;
+    border-top: 1px solid $color-cloud;
   }
 
   .stat {
@@ -164,12 +168,12 @@ $radius: 16px;
       display: block;
       font-size: 1.4rem;
       font-weight: 800;
-      color: $cyan;
+      color: $color-accent;
     }
 
     span {
       font-size: 0.78rem;
-      color: $muted;
+      color: $color-mist;
       font-weight: 500;
     }
   }
@@ -186,33 +190,33 @@ $radius: 16px;
   text-align: center;
   padding: 32px 20px;
   border-radius: $radius;
-  background: $bg;
-  border: 1px solid $border;
+  background: $color-snow;
+  border: 1px solid $color-cloud;
   transition: transform 0.25s ease;
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 12px 36px rgba(30, 58, 95, 0.08);
   }
 
   .avatar {
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background: linear-gradient(135deg, $cyan, $teal);
+    background: linear-gradient(135deg, $color-mountain-deep, $color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 16px;
     font-size: 1.1rem;
     font-weight: 800;
-    color: $white;
+    color: $color-white;
   }
 
   h4 {
     font-size: 1.05rem;
     font-weight: 700;
-    color: $dark;
+    color: $color-charcoal;
     margin: 0 0 4px;
   }
 
@@ -220,14 +224,14 @@ $radius: 16px;
     display: block;
     font-size: 0.78rem;
     font-weight: 600;
-    color: $cyan;
+    color: $color-primary;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 12px;
   }
 
   p {
-    color: $light;
+    color: $color-stone;
     font-size: 0.85rem;
     line-height: 1.6;
     margin: 0;
@@ -237,13 +241,13 @@ $radius: 16px;
 // ===== CTA =====
 .about-cta {
   padding: 80px 0;
-  background: linear-gradient(135deg, $cyan, $teal);
+  background: linear-gradient(135deg, $color-mountain-deep 0%, $color-primary 50%, $color-accent 100%);
   text-align: center;
 
   h2 {
     font-size: 2.2rem;
     font-weight: 800;
-    color: $white;
+    color: $color-white;
     margin: 0 0 12px;
   }
 
@@ -265,8 +269,8 @@ $radius: 16px;
 }
 
 .cta-btn {
-  background: $white !important;
-  color: $cyan !important;
+  background: $color-white !important;
+  color: $color-mountain-deep !important;
   font-weight: 700 !important;
   padding: 12px 32px !important;
   border-radius: 50px !important;
@@ -275,13 +279,17 @@ $radius: 16px;
   align-items: center;
   gap: 8px;
   transition: transform 0.2s ease !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
 
-  &:hover { transform: translateY(-2px) !important; }
+  &:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2) !important;
+  }
 }
 
 .cta-outline {
   border: 2px solid rgba(255, 255, 255, 0.6) !important;
-  color: $white !important;
+  color: $color-white !important;
   font-weight: 600 !important;
   padding: 12px 32px !important;
   border-radius: 50px !important;
@@ -290,7 +298,7 @@ $radius: 16px;
   align-items: center;
   gap: 8px;
 
-  &:hover { background: rgba(255, 255, 255, 0.1) !important; border-color: $white !important; }
+  &:hover { background: rgba(255, 255, 255, 0.1) !important; border-color: $color-white !important; }
 }
 
 // ===== Responsive =====

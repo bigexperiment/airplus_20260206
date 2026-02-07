@@ -1,9 +1,12 @@
-$white: #ffffff;
-$accent-cyan: #0ea5e9;
-$accent-teal: #14b8a6;
-$text-primary: #0f172a;
-$text-secondary: #475569;
-$border-light: #e2e8f0;
+// Himalayan Dawn Theme - Header
+$color-mountain-deep: #1e3a5f;
+$color-primary: #2563eb;
+$color-accent: #ea580c;
+$color-gold: #d97706;
+$color-charcoal: #1e293b;
+$color-slate: #475569;
+$color-cloud: #e2e8f0;
+$color-white: #ffffff;
 
 .main-header {
   position: fixed;
@@ -14,12 +17,12 @@ $border-light: #e2e8f0;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(30, 58, 95, 0.06);
   transition: all 0.3s ease;
 
   &.scrolled {
     background: rgba(255, 255, 255, 0.97);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 30px rgba(30, 58, 95, 0.1);
   }
 }
 
@@ -39,7 +42,7 @@ $border-light: #e2e8f0;
   text-decoration: none;
 
   mat-icon {
-    color: $accent-cyan;
+    color: $color-primary;
     font-size: 32px;
     width: 32px;
     height: 32px;
@@ -48,7 +51,7 @@ $border-light: #e2e8f0;
   span {
     font-size: 1.45rem;
     font-weight: 800;
-    background: linear-gradient(135deg, $accent-cyan, $accent-teal);
+    background: linear-gradient(135deg, $color-mountain-deep, $color-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -62,16 +65,21 @@ $border-light: #e2e8f0;
   gap: 4px;
 
   a, button {
-    color: $text-secondary !important;
+    color: $color-slate !important;
     font-size: 0.92rem;
     font-weight: 600;
     transition: all 0.3s ease;
     border-radius: 10px;
     padding: 8px 16px;
 
-    &:hover, &.active {
-      color: $accent-cyan !important;
-      background: rgba(14, 165, 233, 0.06);
+    &:hover {
+      color: $color-primary !important;
+      background: rgba(37, 99, 235, 0.06);
+    }
+
+    &.active {
+      color: $color-accent !important;
+      background: rgba(234, 88, 12, 0.06);
     }
   }
 
@@ -85,7 +93,7 @@ $border-light: #e2e8f0;
     border-radius: 50%;
     margin-right: 6px;
     object-fit: cover;
-    border: 2px solid rgba(14, 165, 233, 0.2);
+    border: 2px solid rgba(37, 99, 235, 0.2);
   }
 
   @media (max-width: 768px) {
@@ -95,7 +103,7 @@ $border-light: #e2e8f0;
 
 .mobile-menu-btn {
   display: none;
-  color: $text-primary;
+  color: $color-charcoal;
 
   @media (max-width: 768px) {
     display: flex;
@@ -142,7 +150,7 @@ $border-light: #e2e8f0;
     align-items: center;
     gap: 14px;
     padding: 16px 20px;
-    color: $text-primary;
+    color: $color-charcoal;
     text-decoration: none;
     font-size: 1.05rem;
     font-weight: 600;
@@ -153,12 +161,21 @@ $border-light: #e2e8f0;
       font-size: 22px;
       width: 22px;
       height: 22px;
-      color: $accent-cyan;
+      color: $color-primary;
     }
 
-    &:hover, &.active {
-      background: rgba(14, 165, 233, 0.06);
-      color: $accent-cyan;
+    &:hover {
+      background: rgba(37, 99, 235, 0.06);
+      color: $color-primary;
+    }
+
+    &.active {
+      background: rgba(234, 88, 12, 0.06);
+      color: $color-accent;
+
+      mat-icon {
+        color: $color-accent;
+      }
     }
 
     &.logout-link {
@@ -173,7 +190,7 @@ $border-light: #e2e8f0;
 
   .mobile-divider {
     height: 1px;
-    background: $border-light;
+    background: $color-cloud;
     margin: 10px 0;
   }
 }

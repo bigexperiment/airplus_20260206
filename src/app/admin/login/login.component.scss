@@ -1,9 +1,20 @@
+// ===== Himalayan Dawn Theme - Admin Login =====
+$color-mountain-deep: #1e3a5f;
+$color-primary: #2563eb;
+$color-accent: #ea580c;
+$color-charcoal: #1e293b;
+$color-slate: #475569;
+$color-mist: #94a3b8;
+$color-cloud: #e2e8f0;
+$color-fog: #f1f5f9;
+$color-white: #ffffff;
+
 .login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, $color-mountain-deep 0%, $color-primary 100%);
   padding: 20px;
 }
 
@@ -26,15 +37,18 @@
         width: 64px;
         height: 64px;
         margin-bottom: 15px;
+        color: $color-primary;
       }
 
       mat-card-title {
         font-size: 2rem;
         margin-bottom: 8px;
+        color: $color-charcoal;
       }
 
       mat-card-subtitle {
         font-size: 1.1rem;
+        color: $color-slate;
       }
     }
   }
@@ -50,17 +64,17 @@
         font-size: 36px;
         width: 36px;
         height: 36px;
-        color: #667eea;
+        color: $color-primary;
         margin-bottom: 12px;
       }
 
       p {
-        color: #555;
+        color: $color-slate;
         margin: 4px 0;
         font-size: 0.95rem;
 
         &.subtle {
-          color: #888;
+          color: $color-mist;
           font-size: 0.85rem;
           margin-top: 8px;
         }
@@ -72,8 +86,8 @@
       font-size: 1rem;
       font-weight: 500;
       background: white;
-      color: #3c4043;
-      border: 1px solid #dadce0;
+      color: $color-charcoal;
+      border: 1px solid $color-cloud;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -83,8 +97,9 @@
       cursor: pointer;
 
       &:hover:not([disabled]) {
-        background: #f7f8f8;
+        background: $color-fog;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        border-color: $color-mist;
       }
 
       &:disabled {
@@ -114,7 +129,7 @@
         gap: 10px;
 
         mat-icon {
-          color: #667eea;
+          color: $color-primary;
           font-size: 20px;
           width: 20px;
           height: 20px;
@@ -123,7 +138,7 @@
         }
 
         p {
-          color: #888;
+          color: $color-mist;
           font-size: 0.8rem;
           margin: 0;
           line-height: 1.4;
