@@ -37,9 +37,7 @@ yarn-error.log
 testem.log
 /typings
 
-# Environment files (contain API keys & secrets)
-src/environments/environment.ts
-src/environments/environment.prod.ts
+# Environment files
 .env
 
 # System files
