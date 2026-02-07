@@ -17,6 +17,7 @@ import { ContactComponent } from './public/contact/contact.component';
 
 // Admin Components
 import { LoginComponent } from './admin/login/login.component';
+import { AuthCallbackComponent } from './admin/auth-callback/auth-callback.component';
 import { AdminTrekListComponent } from './admin/treks/trek-list/trek-list.component';
 import { TrekFormComponent } from './admin/treks/trek-form/trek-form.component';
 import { BookingsComponent } from './admin/bookings/bookings.component';
@@ -36,6 +37,7 @@ import { SiteContentComponent } from './admin/site-content/site-content.componen
     ContactComponent,
     // Admin Components
     LoginComponent,
+    AuthCallbackComponent,
     AdminTrekListComponent,
     TrekFormComponent,
     BookingsComponent,

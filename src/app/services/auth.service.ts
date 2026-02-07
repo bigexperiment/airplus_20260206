@@ -1,96 +1,170 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { LoginRequest, LoginResponse, User } from '../models';
+import { BehaviorSubject, Observable, from } from 'rxjs';
+import { Router } from '@angular/router';
 import { SupabaseService } from './supabase.service';
+import { User as SupabaseUser, Session } from '@supabase/supabase-js';
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  fullName: string;
+  avatarUrl: string;
+  role: 'ADMIN';
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private currentUserSubject = new BehaviorSubject<AdminUser | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private supabaseService: SupabaseService) {
-    this.loadUserFromStorage();
+  private sessionSubject = new BehaviorSubject<Session | null>(null);
+  private isAllowedAdmin = false;
+  private initialized = false;
+
+  constructor(
+    private supabaseService: SupabaseService,
+    private router: Router
+  ) {
+    this.initAuth();
   }
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
-    return new Observable(observer => {
-      this.supabaseService.client
-        .from('app_users')
-        .select('*')
-        .eq('username', credentials.username)
-        .single()
-        .then(({ data, error }) => {
-          if (error || !data) {
-            observer.error({ error: { message: 'Invalid credentials' } });
-            return;
-          }
+  private async initAuth(): Promise<void> {
+    // Get initial session
+    const { data: { session } } = await this.supabaseService.client.auth.getSession();
+    if (session) {
+      this.sessionSubject.next(session);
+      await this.handleSession(session);
+    }
+    this.initialized = true;
 
-          // For demo: check admin/admin, otherwise check username matches
-          if (credentials.username === 'admin' && credentials.password === 'admin') {
-            const user: User = {
-              id: data.id,
-              username: data.username,
-              email: data.email,
-              role: data.role as any,
-              fullName: data.full_name
-            };
+    // Listen for auth changes (login, logout, token refresh)
+    this.supabaseService.client.auth.onAuthStateChange(async (event, session) => {
+      this.sessionSubject.next(session);
 
-            const response: LoginResponse = {
-              token: 'supabase-session-' + Date.now(),
-              user
-            };
-
-            this.setSession(response);
-            observer.next(response);
-            observer.complete();
-          } else {
-            observer.error({ error: { message: 'Invalid credentials' } });
-          }
-        });
+      if (event === 'SIGNED_IN' && session) {
+        await this.handleSession(session);
+      } else if (event === 'SIGNED_OUT') {
+        this.currentUserSubject.next(null);
+        this.isAllowedAdmin = false;
+      }
     });
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+  private async handleSession(session: Session): Promise<void> {
+    const user = session.user;
+    if (!user?.email) {
+      this.currentUserSubject.next(null);
+      this.isAllowedAdmin = false;
+      return;
+    }
+
+    // Check if user's email is in the allowed_admins table
+    const { data: adminRecord, error } = await this.supabaseService.client
+      .from('allowed_admins')
+      .select('*')
+      .eq('email', user.email)
+      .single();
+
+    if (adminRecord && !error) {
+      this.isAllowedAdmin = true;
+      const adminUser: AdminUser = {
+        id: user.id,
+        email: user.email,
+        fullName: user.user_metadata?.['full_name'] || user.user_metadata?.['name'] || user.email,
+        avatarUrl: user.user_metadata?.['avatar_url'] || user.user_metadata?.['picture'] || '',
+        role: 'ADMIN'
+      };
+      this.currentUserSubject.next(adminUser);
+    } else {
+      this.isAllowedAdmin = false;
+      this.currentUserSubject.next(null);
+    }
+  }
+
+  /**
+   * Sign in with Google OAuth
+   * Redirects user to Google's login page
+   */
+  async signInWithGoogle(): Promise<void> {
+    const { error } = await this.supabaseService.client.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + '/admin/auth/callback'
+      }
+    });
+
+    if (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Handle the OAuth callback - exchange code for session
+   */
+  async handleAuthCallback(): Promise<boolean> {
+    const { data: { session }, error } = await this.supabaseService.client.auth.getSession();
+
+    if (error || !session) {
+      return false;
+    }
+
+    await this.handleSession(session);
+    return this.isAllowedAdmin;
+  }
+
+  /**
+   * Sign out and clear session
+   */
+  async logout(): Promise<void> {
+    await this.supabaseService.client.auth.signOut();
     this.currentUserSubject.next(null);
+    this.isAllowedAdmin = false;
+    this.router.navigate(['/']);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
-
+  /**
+   * Check if a user is currently authenticated with Supabase
+   */
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    return !!token;
+    return this.currentUserSubject.value !== null && this.isAllowedAdmin;
   }
 
-  getCurrentUser(): User | null {
+  /**
+   * Check if the current user is an admin
+   */
+  isAdmin(): boolean {
+    return this.isAllowedAdmin;
+  }
+
+  /**
+   * Get current user
+   */
+  getCurrentUser(): AdminUser | null {
     return this.currentUserSubject.value;
   }
 
-  isAdmin(): boolean {
-    const user = this.getCurrentUser();
-    return user?.role === 'ADMIN';
+  /**
+   * Get the Supabase session (for auth tokens)
+   */
+  getSession(): Session | null {
+    return this.sessionSubject.value;
   }
 
-  private setSession(authResult: LoginResponse): void {
-    localStorage.setItem('token', authResult.token);
-    localStorage.setItem('user', JSON.stringify(authResult.user));
-    this.currentUserSubject.next(authResult.user);
-  }
-
-  private loadUserFromStorage(): void {
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      try {
-        const user = JSON.parse(userStr);
-        this.currentUserSubject.next(user);
-      } catch (e) {
-        console.error('Error parsing user from storage', e);
-      }
-    }
+  /**
+   * Wait for auth to initialize (useful for guards)
+   */
+  async waitForInit(): Promise<void> {
+    if (this.initialized) return;
+    // Poll until initialized
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        if (this.initialized) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 50);
+    });
   }
 }

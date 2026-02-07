@@ -7,18 +7,20 @@ Angular frontend application for the Trekking in Nepal website with Admin CRM & 
 - **Angular 16+** (TypeScript)
 - **Angular Material** (UI Components)
 - **Angular Router** (Navigation)
-- **HttpClient** (REST API calls)
-- **LocalStorage** (JWT token storage, site content persistence)
-- **Google Gemini AI** (Chatbot assistant via REST API)
+- **Supabase** (Database, Auth, Edge Functions)
+- **Google OAuth 2.0** (Admin authentication via Supabase Auth)
+- **Google Gemini AI** (Chatbot assistant via Supabase Edge Function)
 
 ## Project Structure
 
 ```
 /src/app
     /core          - Core services and guards
+        /guards    - AuthGuard, AdminGuard (Supabase Auth-based)
+        /interceptors - HTTP error interceptor
     /shared        - Shared components and modules
     /models        - TypeScript interfaces (trek, user, booking, category, site-content)
-    /services      - API services (trek, booking, user, category, auth, site-content, chatbot)
+    /services      - API services (trek, booking, user, category, auth, supabase, site-content, chatbot)
     /public        - Public-facing pages
         /home
         /trek-list
@@ -26,9 +28,10 @@ Angular frontend application for the Trekking in Nepal website with Admin CRM & 
         /about
         /contact
     /admin         - Admin CRM pages
-        /login
+        /login           - Google OAuth login page
+        /auth-callback   - OAuth callback handler
         /dashboard
-        /site-content  - Visual content editor
+        /site-content    - Visual content editor
         /treks
         /categories
         /bookings
@@ -44,8 +47,9 @@ Angular frontend application for the Trekking in Nepal website with Admin CRM & 
 - `/about` - About page
 - `/contact` - Contact page
 
-### Admin Routes (Protected)
-- `/admin/login` - Admin login
+### Admin Routes (Protected by AuthGuard + AdminGuard)
+- `/admin/login` - Google OAuth login page
+- `/admin/auth-callback` - OAuth redirect handler
 - `/admin/dashboard` - Dashboard with stats overview & quick actions
 - `/admin/content` - **Visual Site Content Editor** (edit all homepage sections)
 - `/admin/treks` - Trek management
@@ -77,27 +81,60 @@ npm run build
 
 Build artifacts will be stored in the `dist/` directory.
 
-## API Configuration
+## Configuration
 
-Update the API base URL and Gemini API key in `src/environments/environment.ts`:
+Supabase connection is configured in `src/environments/environment.ts`:
 
 ```typescript
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/api',
-  geminiApiKey: 'YOUR_GEMINI_API_KEY_HERE'
+  supabaseUrl: 'https://your-project.supabase.co',
+  supabaseAnonKey: 'your-anon-key'
 };
 ```
 
-> **Note**: Replace `YOUR_GEMINI_API_KEY_HERE` with your actual Google Gemini API key to enable the Yeti AI chatbot.
+## Authentication (Google OAuth + Email Whitelist)
 
-## Authentication
+The application uses **Supabase Auth with Google OAuth** for secure admin access:
 
-The application uses JWT-based authentication:
-- Login credentials are sent to `/api/auth/login`
-- JWT token is stored in localStorage
-- Token is attached to all API requests via HTTP interceptor
-- Admin routes are protected with AuthGuard
+### How it works:
+1. Admin clicks **"Sign in with Google"** on the login page
+2. Redirected to Google's OAuth consent screen
+3. After signing in, redirected back to `/admin/auth-callback`
+4. The app checks if the user's email exists in the `allowed_admins` table
+5. **If allowed** → user is granted admin access to the CRM
+6. **If not allowed** → user is signed out and shown "Access Denied"
+
+### Adding authorized admins:
+Add emails to the `allowed_admins` table in Supabase:
+
+```sql
+INSERT INTO allowed_admins (email, role) VALUES ('newemail@gmail.com', 'ADMIN');
+```
+
+### Current authorized emails:
+- `ownerskymats@gmail.com` (ADMIN)
+
+### Security layers:
+- **Google OAuth** — only real Google accounts can attempt login
+- **Email whitelist** — only emails in `allowed_admins` table get access
+- **RLS policies** — database enforces that only authenticated allowed admins can write data
+- **AuthGuard + AdminGuard** — Angular route guards prevent unauthorized navigation
+- **Supabase session** — tokens are managed by Supabase, auto-refreshed, and stored securely
+
+### Google OAuth Setup (Required):
+To enable Google Sign-In, you must configure:
+
+1. **Google Cloud Console** (https://console.cloud.google.com):
+   - Create OAuth 2.0 credentials (Web Application)
+   - Add authorized redirect URI: `https://ynsvkaskkewrgtkoaeyr.supabase.co/auth/v1/callback`
+   - Copy Client ID and Client Secret
+
+2. **Supabase Dashboard** → Authentication → Providers → Google:
+   - Enable Google provider
+   - Paste Client ID and Client Secret
+   - Set redirect URL to: `https://your-domain.com/admin/auth-callback`
 
 ## Features
 
@@ -112,7 +149,8 @@ The application uses JWT-based authentication:
 - **Yeti AI Chatbot**: Cute floating AI assistant powered by Google Gemini — answers visitor questions about treks, tours, company info, and travel tips with a friendly mountain personality
 - Footer displays editable company info from SiteContentService
 
-### Admin CRM
+### Admin CRM (Google OAuth Protected)
+- **Login**: Clean Google OAuth sign-in page with access-restricted messaging
 - **Dashboard**: Overview cards for treks, bookings, categories, and users with quick actions
 - **Visual Site Content Editor** (9 tabbed sections):
   - Hero (badge, title, subtitle, background image with preview)
@@ -128,11 +166,12 @@ The application uses JWT-based authentication:
 - **Category Management**: Inline create/edit/delete
 - **Booking Management**: View, change status, delete
 - **User Management**: Create/edit/delete (admin only)
-- Protected routes with AuthGuard
+- **User avatar and name** displayed in header when logged in
+- Protected routes with AuthGuard + AdminGuard
 
 ### Site Content Architecture
 - `SiteContent` model defines all editable sections (hero, stats, services, testimonials, FAQs, gallery, tours, CTA, company info)
-- `SiteContentService` stores content in localStorage and exposes a reactive `content$` observable
+- `SiteContentService` reads/writes content from Supabase `site_content` table
 - Homepage and footer subscribe to `content$` and update in real-time when content is changed in the editor
 - "Reset to Defaults" button restores all original content
 
@@ -150,26 +189,20 @@ The application uses JWT-based authentication:
 All data is stored in a Supabase PostgreSQL database with Row Level Security (RLS) enabled.
 
 ### Tables
-| Table | Rows | Description |
-|-------|------|-------------|
-| `categories` | 4 | Trek categories (High Altitude, Cultural, Tea House, Camping) |
-| `treks` | 5 | Trek listings with details, pricing, itineraries |
-| `bookings` | 2 | Customer booking enquiries with status tracking |
-| `app_users` | 2 | Admin CRM users (admin + regular user) |
-| `site_content` | 10 | All editable homepage sections stored as JSONB |
+| Table | Description |
+|-------|-------------|
+| `categories` | Trek categories (High Altitude, Cultural, Tea House, Camping) |
+| `treks` | Trek listings with details, pricing, itineraries |
+| `bookings` | Customer booking enquiries with status tracking |
+| `app_users` | Admin CRM users (legacy, kept for compatibility) |
+| `site_content` | All editable homepage sections stored as JSONB |
+| `allowed_admins` | Email whitelist for authorized admin access |
 
 ### RLS Policies
 - **Public read** on `categories`, `treks`, `site_content` (visitors can browse)
 - **Public insert** on `bookings` (visitors can submit enquiries)
-- **Authenticated access** for all write/admin operations
+- **Allowed admins only** for all write/admin operations (checked via `allowed_admins` table + Supabase Auth)
 - Supabase URL and anon key are configured in `src/environments/environment.ts`
-
-## Demo Credentials
-
-- **Username**: admin
-- **Password**: admin
-
-After login, you're redirected to `/admin/dashboard`.
 
 ## Deployment
 
@@ -179,4 +212,4 @@ This frontend can be deployed to:
 - Firebase Hosting
 - AWS S3 + CloudFront
 
-Configure the production API URL and Supabase credentials in `src/environments/environment.prod.ts` before deployment.
+Configure the production Supabase credentials in `src/environments/environment.prod.ts` before deployment.

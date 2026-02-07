@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services';
+import { AuthService, AdminUser } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -15,9 +15,12 @@ export class HeaderComponent {
     private router: Router
   ) {}
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
+  get currentUser(): AdminUser | null {
+    return this.authService.getCurrentUser();
+  }
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
   }
 
   toggleMobileMenu(): void {

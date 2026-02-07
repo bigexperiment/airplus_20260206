@@ -13,8 +13,9 @@
 
       <ng-container *ngIf="authService.isAuthenticated()">
         <button mat-button [matMenuTriggerFor]="adminMenu" class="admin-btn">
-          <mat-icon>admin_panel_settings</mat-icon>
-          Admin
+          <img *ngIf="currentUser?.avatarUrl" [src]="currentUser?.avatarUrl" class="user-avatar" alt="avatar">
+          <mat-icon *ngIf="!currentUser?.avatarUrl">admin_panel_settings</mat-icon>
+          {{ currentUser?.fullName || 'Admin' }}
         </button>
         <mat-menu #adminMenu="matMenu">
           <a mat-menu-item routerLink="/admin/dashboard">
