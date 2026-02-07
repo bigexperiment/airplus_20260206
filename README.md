@@ -139,10 +139,12 @@ To enable Google Sign-In, you must configure:
 ## Features
 
 ### Public Website
-- **Homepage**: Full hero section with stats, services grid, **AI Agent showcase section**, featured treks, cultural tours, testimonials, photo gallery, FAQ accordion, and CTA — all in a clean bright cyan/teal theme
+- **Homepage**: Full hero section with stats, services grid, **AI Agent showcase section**, featured treks, cultural tours, testimonials, photo gallery, FAQ accordion, **How It Works steps**, **Trust & Partners logos**, and CTA — all in a clean bright cyan/teal theme
 - All homepage content is dynamically driven by `SiteContentService` (editable via admin)
-- Browse treks with filters
-- View trek details
+- **Trek List**: Premium filter chips by category, **grid/list view toggle**, sorting options (price, duration, difficulty, name), animated card layouts with responsive design
+- **Trek Detail**: Full hero banner, day-by-day **itinerary timeline**, visual **difficulty indicator**, **what's included/excluded** sections, related treks carousel, and booking sidebar
+- **About Page**: Company story, animated **team member cards**, interactive **company timeline** with milestones, and **certification badges**
+- **Responsive Header**: Desktop + mobile hamburger menu with smooth animations, logged-in user avatar display
 - Submit contact/booking enquiries
 - Responsive design with Angular Material
 - WhatsApp floating chat button

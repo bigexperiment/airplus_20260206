@@ -1,124 +1,188 @@
 <div class="trek-list-page">
-  <div class="page-header">
-    <div class="container">
-      <h1>Explore Our Treks</h1>
-      <p>Find your perfect Himalayan adventure</p>
-    </div>
-  </div>
-
-  <div class="container">
-    <!-- Filters -->
-    <mat-card class="filter-card">
-      <mat-card-content>
-        <div class="filters-grid">
-          <mat-form-field appearance="outline">
-            <mat-label>Search</mat-label>
-            <input matInput [(ngModel)]="searchText" placeholder="Search treks...">
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Region</mat-label>
-            <mat-select [(ngModel)]="filter.region">
-              <mat-option [value]="undefined">All Regions</mat-option>
-              <mat-option *ngFor="let region of regions" [value]="region">
-                {{ region }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Difficulty</mat-label>
-            <mat-select [(ngModel)]="filter.difficulty">
-              <mat-option [value]="undefined">All Levels</mat-option>
-              <mat-option *ngFor="let difficulty of difficulties" [value]="difficulty">
-                {{ difficulty }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Min Days</mat-label>
-            <input matInput type="number" [(ngModel)]="filter.minDays" placeholder="Min">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Max Days</mat-label>
-            <input matInput type="number" [(ngModel)]="filter.maxDays" placeholder="Max">
-          </mat-form-field>
-
-          <div class="filter-actions">
-            <button mat-raised-button color="primary" (click)="applyFilters()">
-              <mat-icon>filter_list</mat-icon>
-              Apply Filters
-            </button>
-            <button mat-button (click)="clearFilters()">
-              <mat-icon>clear</mat-icon>
-              Clear
-            </button>
-          </div>
+  <!-- Hero Banner -->
+  <section class="page-hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay">
+      <div class="container">
+        <span class="hero-badge">
+          <mat-icon>hiking</mat-icon>
+          Explore Nepal
+        </span>
+        <h1>Find Your Perfect Trek</h1>
+        <p>From gentle walks to extreme expeditions — discover the Himalayas your way</p>
+        <div class="hero-search">
+          <mat-icon>search</mat-icon>
+          <input type="text" [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Search treks by name, region, or difficulty...">
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <div class="container main-content">
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="filter-left">
+        <!-- Category Chips -->
+        <div class="category-chips">
+          <button class="chip" [class.active]="!filter.difficulty && !filter.region" (click)="clearFilters()">
+            All Treks
+          </button>
+          <button class="chip" *ngFor="let d of difficulties" 
+                  [class.active]="filter.difficulty === d" 
+                  (click)="toggleDifficulty(d)">
+            {{ d }}
+          </button>
+        </div>
+      </div>
+      <div class="filter-right">
+        <!-- Sort -->
+        <mat-form-field appearance="outline" class="sort-field">
+          <mat-label>Sort by</mat-label>
+          <mat-select [(ngModel)]="sortBy" (selectionChange)="applySort()">
+            <mat-option value="name">Name</mat-option>
+            <mat-option value="price-low">Price: Low to High</mat-option>
+            <mat-option value="price-high">Price: High to Low</mat-option>
+            <mat-option value="days-short">Duration: Short</mat-option>
+            <mat-option value="days-long">Duration: Long</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- View Toggle -->
+        <div class="view-toggle">
+          <button mat-icon-button [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">
+            <mat-icon>grid_view</mat-icon>
+          </button>
+          <button mat-icon-button [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">
+            <mat-icon>view_list</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advanced Filters (collapsible) -->
+    <div class="advanced-filters" *ngIf="showAdvancedFilters">
+      <mat-form-field appearance="outline">
+        <mat-label>Region</mat-label>
+        <mat-select [(ngModel)]="filter.region" (selectionChange)="applyFilters()">
+          <mat-option [value]="undefined">All Regions</mat-option>
+          <mat-option *ngFor="let region of regions" [value]="region">{{ region }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Min Days</mat-label>
+        <input matInput type="number" [(ngModel)]="filter.minDays" (change)="applyFilters()">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Max Days</mat-label>
+        <input matInput type="number" [(ngModel)]="filter.maxDays" (change)="applyFilters()">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Max Price ($)</mat-label>
+        <input matInput type="number" [(ngModel)]="filter.maxPrice" (change)="applyFilters()">
+      </mat-form-field>
+    </div>
+
+    <div class="filter-toggle-row">
+      <button class="toggle-filters-btn" (click)="showAdvancedFilters = !showAdvancedFilters">
+        <mat-icon>{{ showAdvancedFilters ? 'expand_less' : 'tune' }}</mat-icon>
+        {{ showAdvancedFilters ? 'Hide Filters' : 'More Filters' }}
+      </button>
+      <span class="results-count">{{ filteredTreks.length }} trek{{ filteredTreks.length !== 1 ? 's' : '' }} found</span>
+    </div>
 
     <!-- Loading -->
     <div *ngIf="loading" class="loading-container">
-      <mat-spinner></mat-spinner>
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Loading treks...</p>
     </div>
 
-    <!-- Trek List -->
-    <div *ngIf="!loading" class="treks-section">
-      <div class="results-info">
-        <p>Found {{ filteredTreks.length }} trek(s)</p>
-      </div>
+    <!-- No Results -->
+    <div *ngIf="!loading && filteredTreks.length === 0" class="no-results">
+      <div class="no-results-icon">🏔️</div>
+      <h3>No treks found</h3>
+      <p>Try adjusting your filters or search terms</p>
+      <button mat-raised-button class="reset-btn" (click)="clearFilters()">
+        <mat-icon>refresh</mat-icon> Reset All Filters
+      </button>
+    </div>
 
-      <div *ngIf="filteredTreks.length === 0" class="no-results">
-        <mat-icon>search_off</mat-icon>
-        <h3>No treks found</h3>
-        <p>Try adjusting your filters</p>
-      </div>
-
-      <div class="treks-grid">
-        <mat-card *ngFor="let trek of filteredTreks" class="trek-card">
-          <img mat-card-image [src]="trek.imageUrl" [alt]="trek.name">
-          <mat-card-header>
-            <mat-card-title>{{ trek.name }}</mat-card-title>
-            <mat-card-subtitle>
-              <mat-icon>location_on</mat-icon>
-              {{ trek.region }}
-            </mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p class="trek-summary">{{ trek.summary }}</p>
-            
-            <div class="trek-info">
-              <div class="info-item">
-                <mat-icon>schedule</mat-icon>
-                <span>{{ trek.days }} days</span>
-              </div>
-              <div class="info-item">
-                <mat-icon>trending_up</mat-icon>
-                <span>{{ trek.difficulty }}</span>
-              </div>
-              <div class="info-item">
-                <mat-icon>wb_sunny</mat-icon>
-                <span>{{ trek.bestSeason }}</span>
-              </div>
-            </div>
-
-            <div class="trek-price">
-              <span class="price-label">From</span>
-              <span class="price-value">${{ trek.price }}</span>
-              <span class="price-unit">per person</span>
-            </div>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-raised-button color="primary" (click)="viewTrek(trek.id)">
-              View Details
+    <!-- Grid View -->
+    <div *ngIf="!loading && filteredTreks.length > 0 && viewMode === 'grid'" class="treks-grid">
+      <div *ngFor="let trek of filteredTreks" class="trek-card" (click)="viewTrek(trek.id)">
+        <div class="card-image">
+          <img [src]="trek.imageUrl" [alt]="trek.name" loading="lazy">
+          <div class="card-overlay">
+            <span class="difficulty-badge" [ngClass]="getDifficultyClass(trek.difficulty)">
+              {{ trek.difficulty }}
+            </span>
+            <span class="season-badge" *ngIf="trek.bestSeason">
+              <mat-icon>wb_sunny</mat-icon> {{ trek.bestSeason }}
+            </span>
+          </div>
+          <div class="card-hover-overlay">
+            <button mat-fab class="view-btn">
               <mat-icon>arrow_forward</mat-icon>
             </button>
-          </mat-card-actions>
-        </mat-card>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-region">
+            <mat-icon>location_on</mat-icon> {{ trek.region }}
+          </div>
+          <h3>{{ trek.name }}</h3>
+          <p class="card-summary">{{ trek.summary }}</p>
+          <div class="card-meta">
+            <div class="meta-pill">
+              <mat-icon>schedule</mat-icon> {{ trek.days }} Days
+            </div>
+            <div class="meta-pill">
+              <mat-icon>trending_up</mat-icon> {{ trek.difficulty }}
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">
+              <span class="from">From</span>
+              <span class="amount">${{ trek.price }}</span>
+              <span class="per">/ person</span>
+            </div>
+            <span class="view-details">
+              View Details <mat-icon>east</mat-icon>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List View -->
+    <div *ngIf="!loading && filteredTreks.length > 0 && viewMode === 'list'" class="treks-list">
+      <div *ngFor="let trek of filteredTreks" class="trek-list-item" (click)="viewTrek(trek.id)">
+        <div class="list-image">
+          <img [src]="trek.imageUrl" [alt]="trek.name" loading="lazy">
+          <span class="difficulty-badge" [ngClass]="getDifficultyClass(trek.difficulty)">
+            {{ trek.difficulty }}
+          </span>
+        </div>
+        <div class="list-body">
+          <div class="list-region">
+            <mat-icon>location_on</mat-icon> {{ trek.region }}
+          </div>
+          <h3>{{ trek.name }}</h3>
+          <p>{{ trek.summary }}</p>
+          <div class="list-meta">
+            <span><mat-icon>schedule</mat-icon> {{ trek.days }} Days</span>
+            <span><mat-icon>wb_sunny</mat-icon> {{ trek.bestSeason }}</span>
+            <span><mat-icon>trending_up</mat-icon> {{ trek.difficulty }}</span>
+          </div>
+        </div>
+        <div class="list-price-section">
+          <div class="list-price">
+            <span class="from">From</span>
+            <span class="amount">${{ trek.price }}</span>
+            <span class="per">per person</span>
+          </div>
+          <button mat-raised-button class="list-view-btn">
+            View Details <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>

@@ -1,194 +1,295 @@
 <div class="trek-detail-page" *ngIf="!loading && trek">
   <!-- Hero Section -->
-  <div class="trek-hero" [style.background-image]="'url(' + trek.imageUrl + ')'">
-    <div class="hero-overlay">
+  <section class="trek-hero" [style.background-image]="'url(' + trek.imageUrl + ')'">
+    <div class="hero-gradient">
       <div class="container">
-        <button mat-icon-button (click)="goBack()" class="back-button">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
-        <h1>{{ trek.name }}</h1>
-        <p>
+        <div class="hero-top">
+          <button mat-icon-button (click)="goBack()" class="back-btn">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <div class="breadcrumbs">
+            <a routerLink="/">Home</a>
+            <mat-icon>chevron_right</mat-icon>
+            <a routerLink="/treks">Treks</a>
+            <mat-icon>chevron_right</mat-icon>
+            <span>{{ trek.name }}</span>
+          </div>
+        </div>
+        <div class="hero-bottom">
+          <span class="difficulty-chip" [ngClass]="getDifficultyClass(trek.difficulty)">
+            {{ trek.difficulty }}
+          </span>
+          <h1>{{ trek.name }}</h1>
+          <div class="hero-meta">
+            <span class="meta-tag"><mat-icon>location_on</mat-icon> {{ trek.region }}</span>
+            <span class="meta-tag"><mat-icon>schedule</mat-icon> {{ trek.days }} Days</span>
+            <span class="meta-tag"><mat-icon>wb_sunny</mat-icon> {{ trek.bestSeason }}</span>
+            <span class="meta-tag price-tag"><mat-icon>payments</mat-icon> From ${{ trek.price }}/person</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Stats Bar -->
+  <section class="quick-stats">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-item">
+          <mat-icon>schedule</mat-icon>
+          <div>
+            <strong>{{ trek.days }} Days</strong>
+            <span>Duration</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <mat-icon>trending_up</mat-icon>
+          <div>
+            <strong>{{ trek.difficulty }}</strong>
+            <span>Difficulty</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <mat-icon>wb_sunny</mat-icon>
+          <div>
+            <strong>{{ trek.bestSeason }}</strong>
+            <span>Best Season</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
           <mat-icon>location_on</mat-icon>
-          {{ trek.region }}
-        </p>
+          <div>
+            <strong>{{ trek.region }}</strong>
+            <span>Region</span>
+          </div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <mat-icon>payments</mat-icon>
+          <div>
+            <strong>${{ trek.price }}</strong>
+            <span>Per Person</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container content-layout">
+    <!-- Main Content -->
+    <div class="main-col">
+      <!-- Overview -->
+      <section class="content-section">
+        <h2 class="section-heading">
+          <mat-icon>info</mat-icon> Overview
+        </h2>
+        <p class="overview-text">{{ trek.summary }}</p>
+      </section>
+
+      <!-- Trip Highlights -->
+      <section class="content-section highlights-section">
+        <h2 class="section-heading">
+          <mat-icon>stars</mat-icon> Trip Highlights
+        </h2>
+        <div class="highlights-grid">
+          <div class="highlight-item">
+            <div class="highlight-icon"><mat-icon>landscape</mat-icon></div>
+            <span>Stunning mountain views</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-icon"><mat-icon>groups</mat-icon></div>
+            <span>Local cultural experiences</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-icon"><mat-icon>camera_alt</mat-icon></div>
+            <span>Incredible photo opportunities</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-icon"><mat-icon>restaurant</mat-icon></div>
+            <span>Authentic Nepali cuisine</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-icon"><mat-icon>verified_user</mat-icon></div>
+            <span>Expert local guides</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-icon"><mat-icon>eco</mat-icon></div>
+            <span>Eco-friendly trekking</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Itinerary Timeline -->
+      <section class="content-section">
+        <h2 class="section-heading">
+          <mat-icon>route</mat-icon> Day-by-Day Itinerary
+        </h2>
+        <div class="itinerary-timeline">
+          <div class="timeline-item" *ngFor="let day of itineraryDays; let i = index; let last = last">
+            <div class="timeline-marker">
+              <div class="marker-dot" [class.first]="i === 0" [class.last]="last">
+                <span>{{ i + 1 }}</span>
+              </div>
+              <div class="marker-line" *ngIf="!last"></div>
+            </div>
+            <div class="timeline-content">
+              <h4>Day {{ i + 1 }}</h4>
+              <p>{{ day }}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Includes / Excludes -->
+      <section class="content-section">
+        <h2 class="section-heading">
+          <mat-icon>checklist</mat-icon> What's Included & Excluded
+        </h2>
+        <div class="includes-grid">
+          <div class="includes-col">
+            <h4 class="includes-title">
+              <mat-icon>check_circle</mat-icon> Included
+            </h4>
+            <ul class="includes-list">
+              <li>Airport pickup & drop-off</li>
+              <li>All ground transportation</li>
+              <li>Experienced English-speaking guide</li>
+              <li>Porter service (1 porter per 2 trekkers)</li>
+              <li>All lodge/teahouse accommodation</li>
+              <li>All meals during the trek (B/L/D)</li>
+              <li>All permits and entry fees</li>
+              <li>First aid medical kit</li>
+              <li>Sleeping bag (if needed)</li>
+            </ul>
+          </div>
+          <div class="excludes-col">
+            <h4 class="excludes-title">
+              <mat-icon>cancel</mat-icon> Excluded
+            </h4>
+            <ul class="excludes-list">
+              <li>International airfare</li>
+              <li>Nepal visa fee</li>
+              <li>Travel insurance</li>
+              <li>Personal expenses</li>
+              <li>Tips for guide and porters</li>
+              <li>Extra meals in Kathmandu</li>
+              <li>Hot showers & WiFi charges</li>
+              <li>Alcoholic & soft drinks</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="side-col">
+      <!-- Price Card -->
+      <div class="price-card sticky-card">
+        <div class="price-header">
+          <span class="from-text">Starting from</span>
+          <div class="price-amount">${{ trek.price }}</div>
+          <span class="per-text">per person</span>
+        </div>
+
+        <!-- Quick Booking Form -->
+        <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()" class="booking-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="customerName">
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="customerEmail">
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="customerPhone">
+            <mat-icon matSuffix>phone</mat-icon>
+          </mat-form-field>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>People</mat-label>
+              <input matInput type="number" formControlName="numberOfPeople" min="1">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="preferredDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Special Requests</mat-label>
+            <textarea matInput formControlName="message" rows="2"></textarea>
+          </mat-form-field>
+
+          <button mat-raised-button type="submit" class="book-btn"
+                  [disabled]="bookingForm.invalid || submitting">
+            <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+            <span *ngIf="!submitting">
+              <mat-icon>send</mat-icon> Book This Trek
+            </span>
+          </button>
+        </form>
+
+        <div class="price-perks">
+          <div class="perk"><mat-icon>verified</mat-icon> Free cancellation up to 30 days</div>
+          <div class="perk"><mat-icon>lock</mat-icon> Secure & encrypted booking</div>
+          <div class="perk"><mat-icon>support_agent</mat-icon> 24/7 customer support</div>
+        </div>
+      </div>
+
+      <!-- Need Help Card -->
+      <div class="help-card">
+        <h4>Need Help Planning?</h4>
+        <p>Our trek experts are here to help customize your perfect adventure.</p>
+        <a href="https://wa.me/9779862442639" target="_blank" class="whatsapp-btn">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+          Chat on WhatsApp
+        </a>
+        <div class="contact-info">
+          <p><mat-icon>phone</mat-icon> +977-1-4525454</p>
+          <p><mat-icon>email</mat-icon> airplusnepal&#64;gmail.com</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="container">
-    <div class="trek-content">
-      <!-- Main Content -->
-      <div class="main-content">
-        <!-- Overview -->
-        <mat-card class="section-card">
-          <mat-card-header>
-            <mat-card-title>Overview</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>{{ trek.summary }}</p>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Trek Details -->
-        <mat-card class="section-card">
-          <mat-card-header>
-            <mat-card-title>Trek Details</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="details-grid">
-              <div class="detail-item">
-                <mat-icon color="primary">schedule</mat-icon>
-                <div>
-                  <strong>Duration</strong>
-                  <p>{{ trek.days }} days</p>
-                </div>
-              </div>
-              <div class="detail-item">
-                <mat-icon color="primary">trending_up</mat-icon>
-                <div>
-                  <strong>Difficulty</strong>
-                  <p>{{ trek.difficulty }}</p>
-                </div>
-              </div>
-              <div class="detail-item">
-                <mat-icon color="primary">wb_sunny</mat-icon>
-                <div>
-                  <strong>Best Season</strong>
-                  <p>{{ trek.bestSeason }}</p>
-                </div>
-              </div>
-              <div class="detail-item">
-                <mat-icon color="primary">attach_money</mat-icon>
-                <div>
-                  <strong>Price</strong>
-                  <p>${{ trek.price }} per person</p>
-                </div>
-              </div>
+  <!-- Related Treks -->
+  <section class="related-section" *ngIf="relatedTreks.length > 0">
+    <div class="container">
+      <h2 class="section-heading centered">
+        <mat-icon>explore</mat-icon> You May Also Like
+      </h2>
+      <div class="related-grid">
+        <div *ngFor="let rt of relatedTreks" class="related-card" (click)="viewRelatedTrek(rt.id)">
+          <div class="related-image">
+            <img [src]="rt.imageUrl" [alt]="rt.name" loading="lazy">
+            <span class="related-badge">{{ rt.difficulty }}</span>
+          </div>
+          <div class="related-info">
+            <h4>{{ rt.name }}</h4>
+            <div class="related-meta">
+              <span><mat-icon>schedule</mat-icon> {{ rt.days }}D</span>
+              <span class="related-price">${{ rt.price }}</span>
             </div>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Itinerary -->
-        <mat-card class="section-card">
-          <mat-card-header>
-            <mat-card-title>Itinerary</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="itinerary-content">
-              <pre>{{ trek.itinerary }}</pre>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <!-- Price Card -->
-        <mat-card class="price-card">
-          <mat-card-content>
-            <div class="price-info">
-              <span class="price-label">From</span>
-              <span class="price-value">${{ trek.price }}</span>
-              <span class="price-unit">per person</span>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Booking Form -->
-        <mat-card class="booking-card">
-          <mat-card-header>
-            <mat-card-title>Book This Trek</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Full Name</mat-label>
-                <input matInput formControlName="customerName" required>
-                <mat-icon matSuffix>person</mat-icon>
-                <mat-error *ngIf="bookingForm.get('customerName')?.hasError('required')">
-                  Name is required
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" formControlName="customerEmail" required>
-                <mat-icon matSuffix>email</mat-icon>
-                <mat-error *ngIf="bookingForm.get('customerEmail')?.hasError('required')">
-                  Email is required
-                </mat-error>
-                <mat-error *ngIf="bookingForm.get('customerEmail')?.hasError('email')">
-                  Invalid email format
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Phone</mat-label>
-                <input matInput formControlName="customerPhone" required>
-                <mat-icon matSuffix>phone</mat-icon>
-                <mat-error *ngIf="bookingForm.get('customerPhone')?.hasError('required')">
-                  Phone is required
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Number of People</mat-label>
-                <input matInput type="number" formControlName="numberOfPeople" min="1" required>
-                <mat-icon matSuffix>groups</mat-icon>
-                <mat-error *ngIf="bookingForm.get('numberOfPeople')?.hasError('required')">
-                  Number of people is required
-                </mat-error>
-                <mat-error *ngIf="bookingForm.get('numberOfPeople')?.hasError('min')">
-                  At least 1 person required
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Preferred Date</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="preferredDate" required>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-                <mat-error *ngIf="bookingForm.get('preferredDate')?.hasError('required')">
-                  Date is required
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Message (Optional)</mat-label>
-                <textarea matInput formControlName="message" rows="3"></textarea>
-              </mat-form-field>
-
-              <button 
-                mat-raised-button 
-                color="primary" 
-                type="submit" 
-                class="full-width"
-                [disabled]="bookingForm.invalid || submitting">
-                <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
-                <span *ngIf="!submitting">Submit Booking Request</span>
-              </button>
-            </form>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Contact Info -->
-        <mat-card class="contact-card">
-          <mat-card-header>
-            <mat-card-title>Need Help?</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p><mat-icon>phone</mat-icon> +977-1-4123456</p>
-            <p><mat-icon>email</mat-icon> info@trekkingnepal.com</p>
-            <button mat-stroked-button color="primary" routerLink="/contact" class="full-width">
-              Contact Us
-            </button>
-          </mat-card-content>
-        </mat-card>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </div>
 
-<div *ngIf="loading" class="loading-container">
-  <mat-spinner></mat-spinner>
+<div *ngIf="loading" class="loading-page">
+  <mat-spinner diameter="48"></mat-spinner>
+  <p>Loading trek details...</p>
 </div>

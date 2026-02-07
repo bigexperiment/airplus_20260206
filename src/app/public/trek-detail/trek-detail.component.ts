@@ -15,6 +15,8 @@ export class TrekDetailComponent implements OnInit {
   loading = true;
   bookingForm: FormGroup;
   submitting = false;
+  itineraryDays: string[] = [];
+  relatedTreks: Trek[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -35,15 +37,21 @@ export class TrekDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-    this.loadTrek(+id);
+    this.route.params.subscribe(params => {
+      const id = params['id'];
+      this.loadTrek(+id);
+    });
   }
 
   loadTrek(id: number): void {
+    this.loading = true;
     this.trekService.getTrekById(id).subscribe({
       next: (trek) => {
         this.trek = trek;
+        this.parseItinerary(trek.itinerary);
+        this.loadRelatedTreks(trek);
         this.loading = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       },
       error: (error) => {
         console.error('Error loading trek:', error);
@@ -52,6 +60,41 @@ export class TrekDetailComponent implements OnInit {
         this.router.navigate(['/treks']);
       }
     });
+  }
+
+  parseItinerary(itinerary: string): void {
+    if (!itinerary) {
+      this.itineraryDays = ['Arrive in Kathmandu. Hotel check-in and trip briefing.'];
+      return;
+    }
+    // Split by "Day X:" pattern or by newlines
+    const lines = itinerary.split(/\n/).filter(line => line.trim().length > 0);
+    if (lines.length > 1) {
+      this.itineraryDays = lines.map(line => line.replace(/^Day\s*\d+\s*[:.-]\s*/i, '').trim());
+    } else {
+      // If single block, split into sentences
+      this.itineraryDays = itinerary.split(/\.\s+/).filter(s => s.trim().length > 3).map(s => s.trim() + '.');
+    }
+  }
+
+  loadRelatedTreks(trek: Trek): void {
+    this.trekService.getAllTreks().subscribe({
+      next: (treks) => {
+        this.relatedTreks = treks
+          .filter(t => t.id !== trek.id && (t.region === trek.region || t.difficulty === trek.difficulty))
+          .slice(0, 3);
+      }
+    });
+  }
+
+  getDifficultyClass(difficulty: string): string {
+    switch (difficulty?.toLowerCase()) {
+      case 'easy': return 'diff-easy';
+      case 'moderate': return 'diff-moderate';
+      case 'challenging': return 'diff-challenging';
+      case 'difficult': return 'diff-difficult';
+      default: return '';
+    }
   }
 
   submitBooking(): void {
@@ -67,8 +110,8 @@ export class TrekDetailComponent implements OnInit {
 
     this.bookingService.createBooking(bookingData).subscribe({
       next: () => {
-        this.snackBar.open('Booking request submitted successfully!', 'Close', { duration: 5000 });
-        this.bookingForm.reset();
+        this.snackBar.open('🎉 Booking request submitted! We\'ll contact you within 24 hours.', 'Close', { duration: 5000 });
+        this.bookingForm.reset({ numberOfPeople: 1 });
         this.submitting = false;
       },
       error: (error) => {
@@ -77,6 +120,10 @@ export class TrekDetailComponent implements OnInit {
         this.submitting = false;
       }
     });
+  }
+
+  viewRelatedTrek(id: number): void {
+    this.router.navigate(['/treks', id]);
   }
 
   goBack(): void {

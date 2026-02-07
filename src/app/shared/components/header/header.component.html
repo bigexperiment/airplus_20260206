@@ -1,4 +1,4 @@
-<header class="main-header">
+<header class="main-header" [class.scrolled]="isScrolled">
   <div class="container header-content">
     <a routerLink="/" class="logo">
       <mat-icon>flight</mat-icon>
@@ -58,7 +58,40 @@
     </nav>
 
     <button mat-icon-button class="mobile-menu-btn" (click)="toggleMobileMenu()">
-      <mat-icon>menu</mat-icon>
+      <mat-icon>{{ mobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
     </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="mobileMenuOpen">
+    <nav class="mobile-nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">
+        <mat-icon>home</mat-icon> Home
+      </a>
+      <a routerLink="/treks" routerLinkActive="active" (click)="closeMobileMenu()">
+        <mat-icon>hiking</mat-icon> Treks
+      </a>
+      <a routerLink="/about" routerLinkActive="active" (click)="closeMobileMenu()">
+        <mat-icon>info</mat-icon> About
+      </a>
+      <a routerLink="/contact" routerLinkActive="active" (click)="closeMobileMenu()">
+        <mat-icon>mail</mat-icon> Contact
+      </a>
+
+      <div class="mobile-divider"></div>
+
+      <ng-container *ngIf="authService.isAuthenticated()">
+        <a routerLink="/admin/dashboard" (click)="closeMobileMenu()">
+          <mat-icon>dashboard</mat-icon> Dashboard
+        </a>
+        <a (click)="logout(); closeMobileMenu()" class="logout-link">
+          <mat-icon>logout</mat-icon> Logout
+        </a>
+      </ng-container>
+
+      <a routerLink="/admin/login" *ngIf="!authService.isAuthenticated()" (click)="closeMobileMenu()">
+        <mat-icon>login</mat-icon> Admin Login
+      </a>
+    </nav>
   </div>
 </header>
