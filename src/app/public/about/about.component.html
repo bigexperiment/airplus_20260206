@@ -1,16 +1,15 @@
 <div class="about-page" *ngIf="aboutHero">
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="about-hero">
     <div class="hero-bg"></div>
-    <div class="hero-content">
-      <span class="hero-badge">{{ aboutHero.badge }}</span>
+    <div class="hero-inner">
       <h1>{{ aboutHero.title }}</h1>
       <p>{{ aboutHero.subtitle }}</p>
     </div>
   </section>
 
-  <!-- Story Section -->
-  <section class="story-section" *ngIf="aboutStory">
+  <!-- Our Story -->
+  <section class="section" *ngIf="aboutStory">
     <div class="container">
       <div class="story-grid">
         <div class="story-image">
@@ -20,12 +19,12 @@
             <span>{{ aboutStory.yearsLabel }}</span>
           </div>
         </div>
-        <div class="story-content">
+        <div class="story-text">
           <span class="eyebrow">{{ aboutStory.eyebrow }}</span>
           <h2>{{ aboutStory.title }}</h2>
           <p *ngFor="let para of aboutStory.paragraphs">{{ para }}</p>
-          <div class="story-stats" *ngIf="aboutStory.stats.length > 0">
-            <div class="mini-stat" *ngFor="let stat of aboutStory.stats">
+          <div class="stats-row" *ngIf="aboutStory.stats.length > 0">
+            <div class="stat" *ngFor="let stat of aboutStory.stats">
               <strong>{{ stat.value }}</strong>
               <span>{{ stat.label }}</span>
             </div>
@@ -35,95 +34,33 @@
     </div>
   </section>
 
-  <!-- Values Section -->
-  <section class="values-section" *ngIf="aboutValues.length > 0">
+  <!-- Team -->
+  <section class="section alt" *ngIf="teamMembers.length > 0">
     <div class="container">
-      <div class="section-header">
-        <span class="eyebrow">What Drives Us</span>
-        <h2>Our Core Values</h2>
-      </div>
-      <div class="values-grid">
-        <div class="value-card" *ngFor="let value of aboutValues">
-          <div class="value-icon" [ngClass]="value.colorClass">
-            <mat-icon>{{ value.icon }}</mat-icon>
-          </div>
-          <h3>{{ value.title }}</h3>
-          <p>{{ value.description }}</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Team Section -->
-  <section class="team-section" *ngIf="teamMembers.length > 0">
-    <div class="container">
-      <div class="section-header">
-        <span class="eyebrow">Meet the Crew</span>
-        <h2>The People Behind Your Adventures</h2>
-      </div>
+      <h2 class="section-heading">Meet the Team</h2>
       <div class="team-grid">
         <div class="team-card" *ngFor="let member of teamMembers">
-          <div class="team-avatar">
-            <div class="avatar-placeholder">{{ member.initials }}</div>
-          </div>
+          <div class="avatar">{{ member.initials }}</div>
           <h4>{{ member.name }}</h4>
-          <span class="team-role">{{ member.role }}</span>
+          <span class="role">{{ member.role }}</span>
           <p>{{ member.description }}</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Why Choose Us Section -->
-  <section class="why-section" *ngIf="whyChooseUs.length > 0">
-    <div class="container">
-      <div class="section-header light">
-        <span class="eyebrow">Why AirPlus Nepal</span>
-        <h2>What Sets Us Apart</h2>
-      </div>
-      <div class="why-grid">
-        <div class="why-item" *ngFor="let item of whyChooseUs">
-          <mat-icon>{{ item.icon }}</mat-icon>
-          <div>
-            <h4>{{ item.title }}</h4>
-            <p>{{ item.description }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Certifications Section -->
-  <section class="cert-section" *ngIf="certifications.length > 0">
-    <div class="container">
-      <div class="section-header">
-        <span class="eyebrow">Trust & Credibility</span>
-        <h2>Our Certifications</h2>
-      </div>
-      <div class="cert-grid">
-        <div class="cert-card" *ngFor="let cert of certifications">
-          <mat-icon>{{ cert.icon }}</mat-icon>
-          <span class="cert-label">{{ cert.label }}</span>
-          <strong>{{ cert.value }}</strong>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
+  <!-- CTA -->
   <section class="about-cta" *ngIf="aboutCta">
     <div class="container">
-      <div class="cta-content">
-        <h2>{{ aboutCta.title }}</h2>
-        <p>{{ aboutCta.subtitle }}</p>
-        <div class="cta-buttons">
-          <button mat-raised-button class="cta-primary" routerLink="/treks">
-            <mat-icon>explore</mat-icon> Explore Treks
-          </button>
-          <button mat-raised-button class="cta-secondary" routerLink="/contact">
-            <mat-icon>chat</mat-icon> Contact Us
-          </button>
-        </div>
+      <h2>{{ aboutCta.title }}</h2>
+      <p>{{ aboutCta.subtitle }}</p>
+      <div class="cta-actions">
+        <button mat-raised-button class="cta-btn" routerLink="/treks">
+          <mat-icon>explore</mat-icon> Explore Treks
+        </button>
+        <button mat-stroked-button class="cta-outline" routerLink="/contact">
+          <mat-icon>chat</mat-icon> Contact Us
+        </button>
       </div>
     </div>
   </section>

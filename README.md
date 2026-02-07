@@ -141,17 +141,15 @@ To enable Google Sign-In, you must configure:
 ## Features
 
 ### Public Website
-- **Homepage**: Full hero section with stats, services grid, **AI Agent showcase section**, featured treks, cultural tours, testimonials, photo gallery, FAQ accordion, **How It Works steps**, **Trust & Partners logos**, and CTA — all in a clean bright cyan/teal theme
-- All homepage content is dynamically driven by `SiteContentService` (editable via admin)
-- **Trek List**: Premium filter chips by category, **grid/list view toggle**, sorting options (price, duration, difficulty, name), animated card layouts with responsive design
-- **Trek Detail**: Full hero banner, day-by-day **itinerary timeline**, visual **difficulty indicator**, **what's included/excluded** sections, related treks carousel, and booking sidebar
-- **About Page**: Company story, animated **team member cards**, interactive **company timeline** with milestones, and **certification badges**
-- **Responsive Header**: Desktop + mobile hamburger menu with smooth animations, logged-in user avatar display
-- Submit contact/booking enquiries
-- Responsive design with Angular Material
+- **Homepage**: Clean, focused layout — hero, trust strip, 3 featured treks, why-us grid, testimonials, FAQ, and CTA
+- All content is dynamically driven by `SiteContentService` (editable via admin)
+- **Trek List**: Filter chips, grid/list view toggle, sorting by price/duration/difficulty
+- **Trek Detail**: Hero banner, itinerary timeline, difficulty indicator, inclusions/exclusions, related treks
+- **About Page**: Story, team members, CTA — clean and focused
+- **Responsive Header**: Desktop + mobile hamburger menu, logged-in user avatar
 - WhatsApp floating chat button
-- **Yeti AI Chatbot**: Cute floating AI assistant powered by Google Gemini — answers visitor questions about treks, tours, company info, and travel tips with a friendly mountain personality
-- Footer displays editable company info from SiteContentService
+- **Yeti AI Chatbot**: Floating AI assistant powered by Google Gemini (secured via Edge Function)
+- Minimal dark footer with company info from SiteContentService
 
 ### Admin CRM (Google OAuth Protected)
 - **Login**: Clean Google OAuth sign-in page with access-restricted messaging

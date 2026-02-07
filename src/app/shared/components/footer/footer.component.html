@@ -1,64 +1,33 @@
-<footer class="main-footer" *ngIf="company">
+<footer class="footer" *ngIf="company">
   <div class="container">
-    <div class="footer-content">
-      <div class="footer-section brand">
+    <div class="footer-grid">
+      <div class="footer-brand">
         <div class="logo">
           <mat-icon>flight</mat-icon>
           <span>{{ company.name }}</span>
         </div>
         <p>{{ footerTagline }}</p>
-        <div class="registration-info">
-          <span>Reg: {{ company.registration }}</span>
-          <span>License: {{ company.license }}</span>
-          <span>VAT: {{ company.vat }}</span>
-        </div>
       </div>
 
-      <div class="footer-section">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a routerLink="/">Home</a></li>
-          <li><a routerLink="/treks">Treks</a></li>
-          <li><a routerLink="/about">About Us</a></li>
-          <li><a routerLink="/contact">Contact</a></li>
-        </ul>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <a routerLink="/">Home</a>
+        <a routerLink="/treks">Treks</a>
+        <a routerLink="/about">About Us</a>
+        <a routerLink="/contact">Contact</a>
       </div>
 
-      <div class="footer-section">
-        <h4>Contact Info</h4>
-        <div class="contact-item">
-          <mat-icon>person</mat-icon>
-          <span>{{ company.directorName }}</span>
-        </div>
-        <div class="contact-item">
-          <mat-icon>location_on</mat-icon>
-          <span>{{ company.address }}</span>
-        </div>
-        <div class="contact-item">
-          <mat-icon>phone</mat-icon>
-          <span>{{ company.phone }}</span>
-        </div>
-        <div class="contact-item">
-          <mat-icon>email</mat-icon>
-          <a [href]="'mailto:' + company.email">{{ company.email }}</a>
-        </div>
-        <div class="contact-item">
-          <mat-icon>chat</mat-icon>
-          <a [href]="'https://wa.me/' + company.whatsapp" target="_blank">WhatsApp: +{{ company.whatsapp }}</a>
-        </div>
-      </div>
-
-      <div class="footer-section" *ngIf="representatives.length > 0">
-        <h4>Local Representatives</h4>
-        <div class="rep-item" *ngFor="let rep of representatives">
-          <span class="country">{{ rep.country }}</span>
-          <a [href]="'mailto:' + rep.email">{{ rep.email }}</a>
-        </div>
+      <div class="footer-col">
+        <h5>Get in Touch</h5>
+        <div class="contact-row"><mat-icon>location_on</mat-icon><span>{{ company.address }}</span></div>
+        <div class="contact-row"><mat-icon>phone</mat-icon><span>{{ company.phone }}</span></div>
+        <div class="contact-row"><mat-icon>email</mat-icon><a [href]="'mailto:' + company.email">{{ company.email }}</a></div>
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; {{ currentYear }} {{ company.name }}. All rights reserved.</p>
+      <span>&copy; {{ currentYear }} {{ company.name }}. All rights reserved.</span>
+      <span class="reg-info" *ngIf="company.registration">Reg: {{ company.registration }}</span>
     </div>
   </div>
 </footer>

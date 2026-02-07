@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Trek, SiteContent, DestinationItem, WhyChooseItem, HowItWorksStep, TrustBadge } from '../../models';
+import { Trek, SiteContent, WhyChooseItem, TrustBadge } from '../../models';
 import { TrekService, SiteContentService } from '../../services';
 
 @Component({
@@ -13,11 +13,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   featuredTreks: Trek[] = [];
   loading = true;
 
-  // Site content (reactive)
   content!: SiteContent;
-  destinations: DestinationItem[] = [];
   whyChooseUs: WhyChooseItem[] = [];
-  howItWorks: HowItWorksStep[] = [];
   trustBadges: TrustBadge[] = [];
   private contentSub!: Subscription;
 
@@ -30,9 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.contentSub = this.siteContentService.content$.subscribe(content => {
       this.content = content;
-      this.destinations = content.destinations;
       this.whyChooseUs = content.whyChooseUs;
-      this.howItWorks = content.howItWorks;
       this.trustBadges = content.trustBadges;
     });
     this.loadFeaturedTreks();
@@ -47,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   loadFeaturedTreks(): void {
     this.trekService.getAllTreks().subscribe({
       next: (treks) => {
-        this.featuredTreks = treks.slice(0, 5);
+        this.featuredTreks = treks.slice(0, 3);
         this.loading = false;
       },
       error: (error) => {
@@ -59,20 +54,5 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   viewTrek(id: number): void {
     this.router.navigate(['/treks', id]);
-  }
-
-  viewAllTreks(): void {
-    this.router.navigate(['/treks']);
-  }
-
-  scrollToSection(sectionId: string): void {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-
-  formatTitle(title: string): string {
-    return title ? title.replace(/\\n/g, '<br>') : '';
   }
 }
