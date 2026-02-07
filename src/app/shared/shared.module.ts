@@ -30,6 +30,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ChatbotComponent } from './components/chatbot/chatbot.component';
+import { ImagePickerDialogComponent } from './components/image-picker-dialog/image-picker-dialog.component';
 
 const MATERIAL_MODULES = [
   MatToolbarModule,
@@ -58,7 +59,8 @@ const MATERIAL_MODULES = [
 const COMPONENTS = [
   HeaderComponent,
   FooterComponent,
-  ChatbotComponent
+  ChatbotComponent,
+  ImagePickerDialogComponent
 ];
 
 @NgModule({

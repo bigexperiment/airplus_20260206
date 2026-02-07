@@ -25,6 +25,7 @@ import { CategoriesComponent } from './admin/categories/categories.component';
 import { UsersComponent } from './admin/users/users.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { SiteContentComponent } from './admin/site-content/site-content.component';
+import { MediaManagerComponent } from './admin/media-manager/media-manager.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { SiteContentComponent } from './admin/site-content/site-content.componen
     CategoriesComponent,
     UsersComponent,
     DashboardComponent,
-    SiteContentComponent
+    SiteContentComponent,
+    MediaManagerComponent
   ],
   imports: [
     BrowserModule,

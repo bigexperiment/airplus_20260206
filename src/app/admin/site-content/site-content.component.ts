@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { SiteContentService } from '../../services';
+import { ImagePickerDialogComponent, ImagePickerData } from '../../shared/components/image-picker-dialog/image-picker-dialog.component';
 import {
   SiteContent,
   HeroContent,
@@ -142,8 +144,29 @@ export class SiteContentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private siteContentService: SiteContentService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
+
+  // ===== Image Picker =====
+  openImagePicker(form: FormGroup, controlName: string, usageTag?: string): void {
+    const currentUrl = form.get(controlName)?.value || '';
+    const dialogRef = this.dialog.open(ImagePickerDialogComponent, {
+      width: '700px',
+      maxHeight: '90vh',
+      data: {
+        title: 'Choose Image',
+        currentUrl,
+        usageTag
+      } as ImagePickerData
+    });
+
+    dialogRef.afterClosed().subscribe((result: string | undefined) => {
+      if (result) {
+        form.patchValue({ [controlName]: result });
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.content = this.siteContentService.getContent();

@@ -1,0 +1,339 @@
+<div class="media-manager">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1>
+        <mat-icon>photo_library</mat-icon>
+        Media Manager
+      </h1>
+      <p class="subtitle">Upload, organize, and manage all your website images</p>
+    </div>
+    <button mat-raised-button color="primary" class="upload-btn" (click)="triggerFileInput()">
+      <mat-icon>cloud_upload</mat-icon>
+      Upload Images
+    </button>
+  </div>
+
+  <!-- Hidden file inputs -->
+  <input #fileInput type="file" accept="image/*" multiple hidden (change)="onFilesSelected($event)">
+  <input #replaceInput type="file" accept="image/*" hidden (change)="onReplaceFileSelected($event)">
+
+  <!-- Stats Bar -->
+  <div class="stats-bar">
+    <div class="stat">
+      <mat-icon>photo</mat-icon>
+      <span><strong>{{ assets.length }}</strong> images</span>
+    </div>
+    <div class="stat" *ngIf="allTags.length > 0">
+      <mat-icon>label</mat-icon>
+      <span><strong>{{ allTags.length }}</strong> tags</span>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput placeholder="Search images..." [(ngModel)]="searchQuery" (keyup.enter)="applyFilters()">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Filter by Tag</mat-label>
+      <mat-select [(ngModel)]="selectedTag" (selectionChange)="applyFilters()">
+        <mat-option value="">All Tags</mat-option>
+        <mat-option *ngFor="let tag of allTags" [value]="tag">{{ tag }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Used In</mat-label>
+      <mat-select [(ngModel)]="selectedUsage" (selectionChange)="applyFilters()">
+        <mat-option value="">All Locations</mat-option>
+        <mat-option *ngFor="let loc of usageLocations" [value]="loc.value">{{ loc.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-icon-button matTooltip="Clear filters" (click)="clearFilters()" *ngIf="searchQuery || selectedTag || selectedUsage">
+      <mat-icon>filter_list_off</mat-icon>
+    </button>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="content-area" [class.has-detail]="selectedAsset">
+    <!-- Drop Zone + Gallery -->
+    <div class="gallery-area">
+      <!-- Drop Zone -->
+      <div class="drop-zone"
+           [class.drag-over]="dragOver"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event)"
+           (click)="triggerFileInput()">
+        <mat-icon>cloud_upload</mat-icon>
+        <p>Drag & drop images here or <strong>click to browse</strong></p>
+        <span class="hint">JPEG, PNG, WebP, GIF, SVG — Max 10MB each</span>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading-overlay" *ngIf="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="!loading && assets.length === 0">
+        <mat-icon>photo_library</mat-icon>
+        <h3>No images yet</h3>
+        <p>Upload your first image to get started!</p>
+      </div>
+
+      <!-- Image Grid -->
+      <div class="image-grid" *ngIf="assets.length > 0">
+        <div class="image-card"
+             *ngFor="let asset of assets; trackBy: trackById"
+             [class.selected]="selectedAsset?.id === asset.id"
+             (click)="selectAsset(asset)">
+          <div class="image-preview">
+            <img [src]="asset.public_url" [alt]="asset.alt_text || asset.original_name" loading="lazy">
+            <div class="image-overlay">
+              <button mat-icon-button (click)="copyUrl(asset.public_url); $event.stopPropagation()" matTooltip="Copy URL">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteAsset(asset); $event.stopPropagation()" matTooltip="Delete" class="delete-btn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="image-info">
+            <span class="file-name" [matTooltip]="asset.original_name">{{ asset.original_name }}</span>
+            <span class="file-meta">{{ formatSize(asset.file_size) }}</span>
+          </div>
+          <div class="image-tags" *ngIf="asset.tags && asset.tags.length > 0">
+            <mat-chip *ngFor="let tag of asset.tags.slice(0, 3)" class="mini-chip">{{ tag }}</mat-chip>
+            <span *ngIf="asset.tags.length > 3" class="more-tags">+{{ asset.tags.length - 3 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail Panel -->
+    <div class="detail-panel" *ngIf="selectedAsset" [@slideIn]>
+      <div class="detail-header">
+        <h3>Image Details</h3>
+        <button mat-icon-button (click)="closeDetailPanel()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="detail-preview">
+        <img [src]="selectedAsset.public_url" [alt]="selectedAsset.alt_text || selectedAsset.original_name">
+      </div>
+
+      <div class="detail-info">
+        <!-- File Name -->
+        <div class="info-row">
+          <span class="info-label">File Name</span>
+          <span class="info-value">{{ selectedAsset.original_name }}</span>
+        </div>
+
+        <!-- Dimensions -->
+        <div class="info-row" *ngIf="selectedAsset.width && selectedAsset.height">
+          <span class="info-label">Dimensions</span>
+          <span class="info-value">{{ selectedAsset.width }} × {{ selectedAsset.height }}px</span>
+        </div>
+
+        <!-- File Size -->
+        <div class="info-row">
+          <span class="info-label">File Size</span>
+          <span class="info-value">{{ formatSize(selectedAsset.file_size) }}</span>
+        </div>
+
+        <!-- Type -->
+        <div class="info-row">
+          <span class="info-label">Type</span>
+          <span class="info-value">{{ selectedAsset.mime_type }}</span>
+        </div>
+
+        <!-- Uploaded -->
+        <div class="info-row">
+          <span class="info-label">Uploaded</span>
+          <span class="info-value">{{ selectedAsset.created_at | date:'medium' }}</span>
+        </div>
+
+        <!-- Uploaded By -->
+        <div class="info-row" *ngIf="selectedAsset.uploaded_by">
+          <span class="info-label">By</span>
+          <span class="info-value">{{ selectedAsset.uploaded_by }}</span>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Alt Text -->
+        <div class="info-section">
+          <div class="section-header">
+            <span class="info-label">Alt Text</span>
+            <button mat-icon-button (click)="startEditAltText()" *ngIf="!editingAltText" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+          <p class="info-value" *ngIf="!editingAltText">{{ selectedAsset.alt_text || '(none)' }}</p>
+          <div class="edit-inline" *ngIf="editingAltText">
+            <mat-form-field appearance="outline" class="full-width">
+              <input matInput [(ngModel)]="editAltText" placeholder="Describe this image...">
+            </mat-form-field>
+            <div class="edit-actions">
+              <button mat-button color="primary" (click)="saveAltText()">Save</button>
+              <button mat-button (click)="cancelEditAltText()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="info-section">
+          <div class="section-header">
+            <span class="info-label">Tags</span>
+            <button mat-icon-button (click)="startEditTags()" *ngIf="!editingTags" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+          <div class="tag-list" *ngIf="!editingTags">
+            <mat-chip *ngFor="let tag of selectedAsset.tags">{{ tag }}</mat-chip>
+            <span *ngIf="!selectedAsset.tags?.length" class="info-value">(none)</span>
+          </div>
+          <div class="edit-inline" *ngIf="editingTags">
+            <mat-form-field appearance="outline" class="full-width">
+              <input matInput [(ngModel)]="editTagsStr" placeholder="tag1, tag2, tag3">
+              <mat-hint>Comma-separated tags</mat-hint>
+            </mat-form-field>
+            <div class="edit-actions">
+              <button mat-button color="primary" (click)="saveTags()">Save</button>
+              <button mat-button (click)="cancelEditTags()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Used In -->
+        <div class="info-section">
+          <div class="section-header">
+            <span class="info-label">Used In</span>
+            <button mat-icon-button (click)="startEditUsage()" *ngIf="!editingUsage" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+          <div class="usage-list" *ngIf="!editingUsage">
+            <mat-chip *ngFor="let loc of selectedAsset.used_in" class="usage-chip">
+              <mat-icon>place</mat-icon> {{ getUsageLabel(loc) }}
+            </mat-chip>
+            <span *ngIf="!selectedAsset.used_in?.length" class="info-value">(not assigned)</span>
+          </div>
+          <div class="edit-inline" *ngIf="editingUsage">
+            <div class="usage-checkboxes">
+              <label *ngFor="let loc of usageLocations" class="usage-checkbox"
+                     [class.checked]="editUsedIn.includes(loc.value)"
+                     (click)="toggleEditUsage(loc.value)">
+                <mat-icon>{{ editUsedIn.includes(loc.value) ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+                {{ loc.label }}
+              </label>
+            </div>
+            <div class="edit-actions">
+              <button mat-button color="primary" (click)="saveUsage()">Save</button>
+              <button mat-button (click)="cancelEditUsage()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Actions -->
+        <div class="detail-actions">
+          <button mat-stroked-button (click)="copyUrl(selectedAsset.public_url)">
+            <mat-icon>content_copy</mat-icon> Copy URL
+          </button>
+          <button mat-stroked-button (click)="triggerReplace(selectedAsset)">
+            <mat-icon>swap_horiz</mat-icon> Replace
+          </button>
+          <button mat-stroked-button color="warn" (click)="deleteAsset(selectedAsset)">
+            <mat-icon>delete</mat-icon> Delete
+          </button>
+        </div>
+
+        <!-- Public URL -->
+        <div class="url-section">
+          <span class="info-label">Public URL</span>
+          <div class="url-box" (click)="copyUrl(selectedAsset.public_url)">
+            <code>{{ selectedAsset.public_url }}</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Dialog Overlay -->
+<div class="upload-overlay" *ngIf="showUploadDialog">
+  <div class="upload-dialog">
+    <div class="dialog-header">
+      <h2>Upload {{ pendingFiles.length }} Image{{ pendingFiles.length > 1 ? 's' : '' }}</h2>
+      <button mat-icon-button (click)="cancelUpload()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- File preview -->
+    <div class="upload-preview-grid">
+      <div class="upload-preview-item" *ngFor="let file of pendingFiles">
+        <mat-icon>{{ getFileIcon(file.type) }}</mat-icon>
+        <span>{{ file.name }}</span>
+        <span class="file-size">{{ formatSize(file.size) }}</span>
+      </div>
+    </div>
+
+    <!-- Alt text (single file only) -->
+    <mat-form-field appearance="outline" class="full-width" *ngIf="pendingFiles.length === 1">
+      <mat-label>Alt Text (accessibility)</mat-label>
+      <input matInput [(ngModel)]="uploadAltText" placeholder="Describe this image...">
+    </mat-form-field>
+
+    <!-- Tags -->
+    <div class="upload-field">
+      <label>Tags</label>
+      <div class="tag-input-row">
+        <mat-form-field appearance="outline" class="tag-input">
+          <input matInput [(ngModel)]="uploadTagInput" placeholder="Add a tag..." (keyup.enter)="addUploadTag()">
+        </mat-form-field>
+        <button mat-icon-button color="primary" (click)="addUploadTag()" [disabled]="!uploadTagInput.trim()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="tag-chips" *ngIf="uploadTags.length > 0">
+        <mat-chip *ngFor="let tag of uploadTags" (removed)="removeUploadTag(tag)" class="removable-chip">
+          {{ tag }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </div>
+    </div>
+
+    <!-- Usage Location -->
+    <div class="upload-field">
+      <label>Where will this be used?</label>
+      <div class="usage-checkboxes">
+        <label *ngFor="let loc of usageLocations" class="usage-checkbox"
+               [class.checked]="uploadUsedIn.includes(loc.value)"
+               (click)="toggleUploadUsage(loc.value)">
+          <mat-icon>{{ uploadUsedIn.includes(loc.value) ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+          {{ loc.label }}
+        </label>
+      </div>
+    </div>
+
+    <div class="dialog-actions">
+      <button mat-button (click)="cancelUpload()">Cancel</button>
+      <button mat-raised-button color="primary" (click)="confirmUpload()" [disabled]="uploading">
+        <mat-spinner diameter="20" *ngIf="uploading"></mat-spinner>
+        <mat-icon *ngIf="!uploading">cloud_upload</mat-icon>
+        {{ uploading ? 'Uploading...' : 'Upload' }}
+      </button>
+    </div>
+  </div>
+</div>
+

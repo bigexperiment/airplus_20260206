@@ -19,6 +19,7 @@ import { CategoriesComponent } from './admin/categories/categories.component';
 import { UsersComponent } from './admin/users/users.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { SiteContentComponent } from './admin/site-content/site-content.component';
+import { MediaManagerComponent } from './admin/media-manager/media-manager.component';
 
 const routes: Routes = [
   // Public Routes
@@ -39,6 +40,11 @@ const routes: Routes = [
   { 
     path: 'admin/content', 
     component: SiteContentComponent,
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'admin/media', 
+    component: MediaManagerComponent,
     canActivate: [AuthGuard]
   },
   { 

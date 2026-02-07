@@ -19,8 +19,8 @@ Angular frontend application for the Trekking in Nepal website with Admin CRM & 
         /guards    - AuthGuard, AdminGuard (Supabase Auth-based)
         /interceptors - HTTP error interceptor
     /shared        - Shared components and modules
-    /models        - TypeScript interfaces (trek, user, booking, category, site-content)
-    /services      - API services (trek, booking, user, category, auth, supabase, site-content, chatbot)
+    /models        - TypeScript interfaces (trek, user, booking, category, site-content, media-asset)
+    /services      - API services (trek, booking, user, category, auth, supabase, site-content, chatbot, media)
     /public        - Public-facing pages
         /home
         /trek-list
@@ -32,6 +32,7 @@ Angular frontend application for the Trekking in Nepal website with Admin CRM & 
         /auth-callback   - OAuth callback handler
         /dashboard
         /site-content    - Visual content editor
+        /media-manager   - Media asset manager (upload, organize, replace images)
         /treks
         /categories
         /bookings
@@ -52,6 +53,7 @@ Angular frontend application for the Trekking in Nepal website with Admin CRM & 
 - `/admin/auth-callback` - OAuth redirect handler
 - `/admin/dashboard` - Dashboard with stats overview & quick actions
 - `/admin/content` - **Visual Site Content Editor** (edit all homepage sections)
+- `/admin/media` - **Media Manager** (upload, organize, replace, delete images with Supabase Storage)
 - `/admin/treks` - Trek management
 - `/admin/treks/new` - Create new trek
 - `/admin/treks/:id/edit` - Edit trek
@@ -167,6 +169,15 @@ To enable Google Sign-In, you must configure:
 - **Trek Management**: CRUD operations with table, search, sort, paginate
 - **Category Management**: Inline create/edit/delete
 - **Booking Management**: View, change status, delete
+- **Media Manager** (Supabase Storage):
+  - Drag-and-drop or click-to-upload images (JPEG, PNG, WebP, GIF, SVG — max 10MB)
+  - Gallery grid with search, filter by tag, filter by usage location
+  - Detail panel: view dimensions, file size, upload date, uploader
+  - Edit alt text, tags, and usage locations inline
+  - Replace image (swaps file but keeps metadata & URL references)
+  - Copy public URL to clipboard
+  - Delete with confirmation
+  - **Image Picker Dialog**: reusable popup for choosing images from the media library when editing site content — also supports inline upload and manual URL entry
 - **User Management**: Create/edit/delete (admin only)
 - **User avatar and name** displayed in header when logged in
 - Protected routes with AuthGuard + AdminGuard
@@ -198,6 +209,7 @@ All data is stored in a Supabase PostgreSQL database with Row Level Security (RL
 | `bookings` | Customer booking enquiries with status tracking |
 | `app_users` | Admin CRM users (legacy, kept for compatibility) |
 | `site_content` | All editable homepage sections stored as JSONB |
+| `media_assets` | Image metadata — file name, URL, alt text, tags, usage locations, dimensions |
 | `allowed_admins` | Email whitelist for authorized admin access |
 
 ### RLS Policies

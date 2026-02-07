@@ -364,6 +364,39 @@ $border: #e2e8f0;
   }
 }
 
+// Image URL row with browse button
+.image-url-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  .full-width {
+    flex: 1;
+  }
+
+  .browse-media-btn {
+    margin-top: 4px;
+    height: 44px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    border-color: $accent-cyan;
+    color: $accent-cyan;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      margin-right: 4px;
+    }
+
+    &:hover {
+      background: rgba(14, 165, 233, 0.06);
+    }
+  }
+}
+
 // Tour specific
 .tour-item {
   .tour-thumb {

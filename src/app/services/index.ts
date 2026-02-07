@@ -6,3 +6,4 @@ export * from './category.service';
 export * from './user.service';
 export * from './site-content.service';
 export * from './chatbot.service';
+export * from './media.service';

@@ -35,10 +35,15 @@
             <mat-label>Subtitle</mat-label>
             <textarea matInput formControlName="subtitle" rows="3"></textarea>
           </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Background Image URL</mat-label>
-            <input matInput formControlName="backgroundImage">
-          </mat-form-field>
+          <div class="image-url-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Background Image URL</mat-label>
+              <input matInput formControlName="backgroundImage">
+            </mat-form-field>
+            <button mat-stroked-button type="button" class="browse-media-btn" (click)="openImagePicker(heroForm, 'backgroundImage', 'home-hero')">
+              <mat-icon>photo_library</mat-icon> Browse
+            </button>
+          </div>
           <div class="preview-image" *ngIf="heroForm.get('backgroundImage')?.value">
             <img [src]="heroForm.get('backgroundImage')?.value" alt="Hero preview">
           </div>
@@ -203,10 +208,15 @@
               <mat-label>Description</mat-label>
               <input matInput formControlName="description">
             </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Image URL</mat-label>
-              <input matInput formControlName="imageUrl">
-            </mat-form-field>
+            <div class="image-url-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Image URL</mat-label>
+                <input matInput formControlName="imageUrl">
+              </mat-form-field>
+              <button mat-stroked-button type="button" class="browse-media-btn" (click)="openImagePicker(destinationForm, 'imageUrl', 'home-destinations')">
+                <mat-icon>photo_library</mat-icon> Browse
+              </button>
+            </div>
             <mat-form-field appearance="outline">
               <mat-label>Card Size</mat-label>
               <mat-select formControlName="size">
@@ -514,10 +524,15 @@
         </div>
         <mat-card class="inline-form-card" *ngIf="editingGallery !== undefined && (editingGallery || galleryForm.dirty)">
           <form [formGroup]="galleryForm" (ngSubmit)="saveGalleryImage()">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Image URL</mat-label>
-              <input matInput formControlName="url">
-            </mat-form-field>
+            <div class="image-url-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Image URL</mat-label>
+                <input matInput formControlName="url">
+              </mat-form-field>
+              <button mat-stroked-button type="button" class="browse-media-btn" (click)="openImagePicker(galleryForm, 'url', 'home-gallery')">
+                <mat-icon>photo_library</mat-icon> Browse
+              </button>
+            </div>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Alt Text (optional)</mat-label>
               <input matInput formControlName="alt">
@@ -576,10 +591,15 @@
               <mat-label>Description</mat-label>
               <textarea matInput formControlName="description" rows="2"></textarea>
             </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Image URL</mat-label>
-              <input matInput formControlName="imageUrl">
-            </mat-form-field>
+            <div class="image-url-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Image URL</mat-label>
+                <input matInput formControlName="imageUrl">
+              </mat-form-field>
+              <button mat-stroked-button type="button" class="browse-media-btn" (click)="openImagePicker(tourForm, 'imageUrl', 'home-cultural-tours')">
+                <mat-icon>photo_library</mat-icon> Browse
+              </button>
+            </div>
             <div class="preview-image" *ngIf="tourForm.get('imageUrl')?.value">
               <img [src]="tourForm.get('imageUrl')?.value" alt="Tour preview">
             </div>
@@ -969,10 +989,15 @@
             <mat-label>Paragraph 2 (optional)</mat-label>
             <textarea matInput formControlName="paragraph2" rows="3"></textarea>
           </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Story Image URL</mat-label>
-            <input matInput formControlName="imageUrl">
-          </mat-form-field>
+          <div class="image-url-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Story Image URL</mat-label>
+              <input matInput formControlName="imageUrl">
+            </mat-form-field>
+            <button mat-stroked-button type="button" class="browse-media-btn" (click)="openImagePicker(aboutStoryForm, 'imageUrl', 'about-story')">
+              <mat-icon>photo_library</mat-icon> Browse
+            </button>
+          </div>
           <div class="preview-image" *ngIf="aboutStoryForm.get('imageUrl')?.value">
             <img [src]="aboutStoryForm.get('imageUrl')?.value" alt="Story preview">
           </div>
