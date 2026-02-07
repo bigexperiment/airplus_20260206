@@ -138,12 +138,12 @@ The application uses JWT-based authentication:
 
 ### Yeti AI Chatbot
 - Cute floating chat widget (bottom-right corner) powered by Google Gemini 2.0 Flash
+- **Secure**: Gemini API key is stored server-side in a Supabase Edge Function (`gemini-chat`) — never exposed to the browser
 - **System Instructions**: Automatically fed company info, FAQs, services, tours, and testimonials from `SiteContentService` — the AI knows everything about the site!
 - Quick-action buttons for common questions (Treks, Tours, Contact, Fitness)
 - Typing animation, conversation history, and message timestamps
 - Responsive design with smooth open/close animations
-- Graceful fallback message when API key is not configured
-- `ChatbotService` handles Gemini API communication and conversation state
+- `ChatbotService` calls the Edge Function proxy instead of Gemini directly
 
 ## Database (Supabase)
 

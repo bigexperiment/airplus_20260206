@@ -14,7 +14,8 @@ export interface ChatMessage {
   providedIn: 'root'
 })
 export class ChatbotService {
-  private apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+  // Use Supabase Edge Function (Gemini key stays server-side)
+  private edgeFunctionUrl = `${environment.supabaseUrl}/functions/v1/gemini-chat`;
   private conversationHistory: { role: string; parts: { text: string }[] }[] = [];
 
   constructor(
@@ -92,12 +93,6 @@ IMPORTANT RULES:
   }
 
   sendMessage(userMessage: string): Observable<string> {
-    const apiKey = environment.geminiApiKey;
-
-    if (!apiKey || apiKey === 'YOUR_GEMINI_API_KEY_HERE') {
-      return of('🏔️ Oops! My brain is still warming up. Please check back soon — the team is setting me up!');
-    }
-
     // Add user message to history
     this.conversationHistory.push({
       role: 'user',
@@ -117,10 +112,11 @@ IMPORTANT RULES:
       }
     };
 
-    const url = `${this.apiUrl}?key=${apiKey}`;
-
-    return this.http.post<any>(url, requestBody, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    return this.http.post<any>(this.edgeFunctionUrl, requestBody, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'apikey': environment.supabaseKey
+      })
     }).pipe(
       map(response => {
         const reply = response?.candidates?.[0]?.content?.parts?.[0]?.text
@@ -147,4 +143,3 @@ IMPORTANT RULES:
     this.conversationHistory = [];
   }
 }
-

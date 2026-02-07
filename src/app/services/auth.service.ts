@@ -1,46 +1,54 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginRequest, LoginResponse, User } from '../models';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}/auth`;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private supabaseService: SupabaseService) {
     this.loadUserFromStorage();
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    // TODO: Replace with actual API call
-    // return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials)
-    
-    // Mock implementation
     return new Observable(observer => {
-      setTimeout(() => {
-        if (credentials.username === 'admin' && credentials.password === 'admin') {
-          const response: LoginResponse = {
-            token: 'mock-jwt-token-' + Date.now(),
-            user: {
-              id: 1,
-              username: 'admin',
-              email: 'admin@trekking.com',
-              role: 'ADMIN' as any,
-              fullName: 'Admin User'
-            }
-          };
-          this.setSession(response);
-          observer.next(response);
-          observer.complete();
-        } else {
-          observer.error({ error: { message: 'Invalid credentials' } });
-        }
-      }, 500);
+      this.supabaseService.client
+        .from('app_users')
+        .select('*')
+        .eq('username', credentials.username)
+        .single()
+        .then(({ data, error }) => {
+          if (error || !data) {
+            observer.error({ error: { message: 'Invalid credentials' } });
+            return;
+          }
+
+          // For demo: check admin/admin, otherwise check username matches
+          if (credentials.username === 'admin' && credentials.password === 'admin') {
+            const user: User = {
+              id: data.id,
+              username: data.username,
+              email: data.email,
+              role: data.role as any,
+              fullName: data.full_name
+            };
+
+            const response: LoginResponse = {
+              token: 'supabase-session-' + Date.now(),
+              user
+            };
+
+            this.setSession(response);
+            observer.next(response);
+            observer.complete();
+          } else {
+            observer.error({ error: { message: 'Invalid credentials' } });
+          }
+        });
     });
   }
 

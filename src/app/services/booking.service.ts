@@ -1,102 +1,112 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { Observable, from } from 'rxjs';
 import { Booking, BookingRequest, BookingStatus } from '../models';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
-  private apiUrl = `${environment.apiUrl}/bookings`;
 
-  // Mock data for development
-  private mockBookings: Booking[] = [
-    {
-      id: 1,
-      trekId: 1,
-      trekName: 'Everest Base Camp Trek',
-      customerName: 'John Doe',
-      customerEmail: 'john@example.com',
-      customerPhone: '+977-9841234567',
-      numberOfPeople: 2,
-      preferredDate: new Date('2024-04-15'),
-      message: 'Looking forward to this trek!',
-      status: BookingStatus.PENDING,
-      createdAt: new Date('2024-03-01')
-    },
-    {
-      id: 2,
-      trekId: 2,
-      trekName: 'Annapurna Circuit Trek',
-      customerName: 'Jane Smith',
-      customerEmail: 'jane@example.com',
-      customerPhone: '+977-9851234567',
-      numberOfPeople: 4,
-      preferredDate: new Date('2024-05-20'),
-      message: 'Family trip',
-      status: BookingStatus.CONFIRMED,
-      createdAt: new Date('2024-03-05')
-    }
-  ];
-
-  constructor(private http: HttpClient) {}
+  constructor(private supabaseService: SupabaseService) {}
 
   getAllBookings(): Observable<Booking[]> {
-    // TODO: Replace with actual API call
-    // return this.http.get<Booking[]>(this.apiUrl);
-
-    // Mock implementation
-    return of(this.mockBookings);
+    return from(
+      this.supabaseService.client
+        .from('bookings')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Error fetching bookings:', error);
+            return [];
+          }
+          return (data || []).map(row => this.mapBooking(row));
+        })
+    );
   }
 
   getBookingById(id: number): Observable<Booking> {
-    // TODO: Replace with actual API call
-    // return this.http.get<Booking>(`${this.apiUrl}/${id}`);
-
-    // Mock implementation
-    const booking = this.mockBookings.find(b => b.id === id);
-    return of(booking!);
+    return from(
+      this.supabaseService.client
+        .from('bookings')
+        .select('*')
+        .eq('id', id)
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapBooking(data);
+        })
+    );
   }
 
   createBooking(booking: BookingRequest): Observable<Booking> {
-    // TODO: Replace with actual API call
-    // return this.http.post<Booking>(this.apiUrl, booking);
-
-    // Mock implementation
-    const newBooking: Booking = {
-      id: Math.max(...this.mockBookings.map(b => b.id), 0) + 1,
-      ...booking,
-      status: BookingStatus.PENDING,
-      createdAt: new Date()
-    };
-    this.mockBookings.push(newBooking);
-    return of(newBooking);
+    return from(
+      this.supabaseService.client
+        .from('bookings')
+        .insert({
+          trek_id: booking.trekId,
+          customer_name: booking.customerName,
+          customer_email: booking.customerEmail,
+          customer_phone: booking.customerPhone,
+          number_of_people: booking.numberOfPeople,
+          preferred_date: booking.preferredDate,
+          message: booking.message || null,
+          status: 'PENDING'
+        })
+        .select()
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapBooking(data);
+        })
+    );
   }
 
   updateBookingStatus(id: number, status: BookingStatus): Observable<Booking> {
-    // TODO: Replace with actual API call
-    // return this.http.patch<Booking>(`${this.apiUrl}/${id}/status`, { status });
-
-    // Mock implementation
-    const index = this.mockBookings.findIndex(b => b.id === id);
-    if (index !== -1) {
-      this.mockBookings[index].status = status;
-      this.mockBookings[index].updatedAt = new Date();
-      return of(this.mockBookings[index]);
-    }
-    throw new Error('Booking not found');
+    return from(
+      this.supabaseService.client
+        .from('bookings')
+        .update({
+          status: status,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapBooking(data);
+        })
+    );
   }
 
   deleteBooking(id: number): Observable<void> {
-    // TODO: Replace with actual API call
-    // return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return from(
+      this.supabaseService.client
+        .from('bookings')
+        .delete()
+        .eq('id', id)
+        .then(({ error }) => {
+          if (error) throw error;
+        })
+    );
+  }
 
-    // Mock implementation
-    const index = this.mockBookings.findIndex(b => b.id === id);
-    if (index !== -1) {
-      this.mockBookings.splice(index, 1);
-    }
-    return of(void 0);
+  private mapBooking(row: any): Booking {
+    return {
+      id: row.id,
+      trekId: row.trek_id,
+      trekName: row.trek_name,
+      customerName: row.customer_name,
+      customerEmail: row.customer_email,
+      customerPhone: row.customer_phone,
+      numberOfPeople: row.number_of_people,
+      preferredDate: row.preferred_date ? new Date(row.preferred_date) : new Date(),
+      message: row.message,
+      status: row.status as BookingStatus,
+      createdAt: row.created_at ? new Date(row.created_at) : undefined,
+      updatedAt: row.updated_at ? new Date(row.updated_at) : undefined
+    };
   }
 }

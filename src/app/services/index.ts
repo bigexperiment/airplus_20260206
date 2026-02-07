@@ -1,3 +1,4 @@
+export * from './supabase.service';
 export * from './auth.service';
 export * from './trek.service';
 export * from './booking.service';

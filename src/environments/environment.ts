@@ -1,7 +1,6 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/api',
-  geminiApiKey: 'AIzaSyDR5RNVnBZigFEWUOpPAFR6Aqai5WzJUPU',
   supabaseUrl: 'https://ynsvkaskkewrgtkoaeyr.supabase.co',
   supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inluc3ZrYXNra2V3cmd0a29hZXlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MjQyNDMsImV4cCI6MjA4NjAwMDI0M30.r9763yQCUJHA-NlDYkC77VORZXdy_-Tu2COz4k79XrI'
 };

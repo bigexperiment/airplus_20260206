@@ -1,103 +1,100 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { Observable, from } from 'rxjs';
 import { Category } from '../models';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl = `${environment.apiUrl}/categories`;
 
-  // Mock data for development
-  private mockCategories: Category[] = [
-    {
-      id: 1,
-      name: 'High Altitude Treks',
-      description: 'Treks above 4000m altitude',
-      createdAt: new Date('2024-01-01')
-    },
-    {
-      id: 2,
-      name: 'Cultural Treks',
-      description: 'Treks focused on local culture and traditions',
-      createdAt: new Date('2024-01-01')
-    },
-    {
-      id: 3,
-      name: 'Tea House Treks',
-      description: 'Treks with tea house accommodations',
-      createdAt: new Date('2024-01-01')
-    },
-    {
-      id: 4,
-      name: 'Camping Treks',
-      description: 'Treks requiring camping equipment',
-      createdAt: new Date('2024-01-01')
-    }
-  ];
-
-  constructor(private http: HttpClient) {}
+  constructor(private supabaseService: SupabaseService) {}
 
   getAllCategories(): Observable<Category[]> {
-    // TODO: Replace with actual API call
-    // return this.http.get<Category[]>(this.apiUrl);
-
-    // Mock implementation
-    return of(this.mockCategories);
+    return from(
+      this.supabaseService.client
+        .from('categories')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Error fetching categories:', error);
+            return [];
+          }
+          return (data || []).map(row => this.mapCategory(row));
+        })
+    );
   }
 
   getCategoryById(id: number): Observable<Category> {
-    // TODO: Replace with actual API call
-    // return this.http.get<Category>(`${this.apiUrl}/${id}`);
-
-    // Mock implementation
-    const category = this.mockCategories.find(c => c.id === id);
-    return of(category!);
+    return from(
+      this.supabaseService.client
+        .from('categories')
+        .select('*')
+        .eq('id', id)
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapCategory(data);
+        })
+    );
   }
 
   createCategory(category: Partial<Category>): Observable<Category> {
-    // TODO: Replace with actual API call
-    // return this.http.post<Category>(this.apiUrl, category);
-
-    // Mock implementation
-    const newCategory: Category = {
-      id: Math.max(...this.mockCategories.map(c => c.id)) + 1,
-      name: category.name!,
-      description: category.description,
-      createdAt: new Date()
-    };
-    this.mockCategories.push(newCategory);
-    return of(newCategory);
+    return from(
+      this.supabaseService.client
+        .from('categories')
+        .insert({
+          name: category.name,
+          description: category.description
+        })
+        .select()
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapCategory(data);
+        })
+    );
   }
 
   updateCategory(id: number, category: Partial<Category>): Observable<Category> {
-    // TODO: Replace with actual API call
-    // return this.http.put<Category>(`${this.apiUrl}/${id}`, category);
-
-    // Mock implementation
-    const index = this.mockCategories.findIndex(c => c.id === id);
-    if (index !== -1) {
-      this.mockCategories[index] = { 
-        ...this.mockCategories[index], 
-        ...category,
-        updatedAt: new Date()
-      };
-      return of(this.mockCategories[index]);
-    }
-    throw new Error('Category not found');
+    return from(
+      this.supabaseService.client
+        .from('categories')
+        .update({
+          name: category.name,
+          description: category.description,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapCategory(data);
+        })
+    );
   }
 
   deleteCategory(id: number): Observable<void> {
-    // TODO: Replace with actual API call
-    // return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return from(
+      this.supabaseService.client
+        .from('categories')
+        .delete()
+        .eq('id', id)
+        .then(({ error }) => {
+          if (error) throw error;
+        })
+    );
+  }
 
-    // Mock implementation
-    const index = this.mockCategories.findIndex(c => c.id === id);
-    if (index !== -1) {
-      this.mockCategories.splice(index, 1);
-    }
-    return of(void 0);
+  private mapCategory(row: any): Category {
+    return {
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      createdAt: row.created_at ? new Date(row.created_at) : undefined,
+      updatedAt: row.updated_at ? new Date(row.updated_at) : undefined
+    };
   }
 }

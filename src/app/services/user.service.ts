@@ -1,97 +1,109 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { Observable, from } from 'rxjs';
 import { User, RegisterRequest } from '../models';
+import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiUrl}/users`;
 
-  // Mock data for development
-  private mockUsers: User[] = [
-    {
-      id: 1,
-      username: 'admin',
-      email: 'admin@trekking.com',
-      role: 'ADMIN' as any,
-      fullName: 'Admin User',
-      createdAt: new Date('2024-01-01')
-    },
-    {
-      id: 2,
-      username: 'user1',
-      email: 'user1@example.com',
-      role: 'USER' as any,
-      fullName: 'Regular User',
-      createdAt: new Date('2024-02-01')
-    }
-  ];
-
-  constructor(private http: HttpClient) {}
+  constructor(private supabaseService: SupabaseService) {}
 
   getAllUsers(): Observable<User[]> {
-    // TODO: Replace with actual API call
-    // return this.http.get<User[]>(this.apiUrl);
-
-    // Mock implementation
-    return of(this.mockUsers);
+    return from(
+      this.supabaseService.client
+        .from('app_users')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .then(({ data, error }) => {
+          if (error) {
+            console.error('Error fetching users:', error);
+            return [];
+          }
+          return (data || []).map(row => this.mapUser(row));
+        })
+    );
   }
 
   getUserById(id: number): Observable<User> {
-    // TODO: Replace with actual API call
-    // return this.http.get<User>(`${this.apiUrl}/${id}`);
-
-    // Mock implementation
-    const user = this.mockUsers.find(u => u.id === id);
-    return of(user!);
+    return from(
+      this.supabaseService.client
+        .from('app_users')
+        .select('*')
+        .eq('id', id)
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapUser(data);
+        })
+    );
   }
 
   createUser(user: RegisterRequest): Observable<User> {
-    // TODO: Replace with actual API call
-    // return this.http.post<User>(this.apiUrl, user);
-
-    // Mock implementation
-    const newUser: User = {
-      id: Math.max(...this.mockUsers.map(u => u.id)) + 1,
-      username: user.username,
-      email: user.email,
-      role: 'USER' as any,
-      fullName: user.fullName,
-      createdAt: new Date()
-    };
-    this.mockUsers.push(newUser);
-    return of(newUser);
+    return from(
+      this.supabaseService.client
+        .from('app_users')
+        .insert({
+          username: user.username,
+          email: user.email,
+          password_hash: '',
+          role: 'USER',
+          full_name: user.fullName || null
+        })
+        .select()
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapUser(data);
+        })
+    );
   }
 
   updateUser(id: number, user: Partial<User>): Observable<User> {
-    // TODO: Replace with actual API call
-    // return this.http.put<User>(`${this.apiUrl}/${id}`, user);
+    const updateData: any = {
+      updated_at: new Date().toISOString()
+    };
+    if (user.username) updateData.username = user.username;
+    if (user.email) updateData.email = user.email;
+    if (user.fullName) updateData.full_name = user.fullName;
+    if (user.role) updateData.role = user.role;
 
-    // Mock implementation
-    const index = this.mockUsers.findIndex(u => u.id === id);
-    if (index !== -1) {
-      this.mockUsers[index] = { 
-        ...this.mockUsers[index], 
-        ...user,
-        updatedAt: new Date()
-      };
-      return of(this.mockUsers[index]);
-    }
-    throw new Error('User not found');
+    return from(
+      this.supabaseService.client
+        .from('app_users')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          return this.mapUser(data);
+        })
+    );
   }
 
   deleteUser(id: number): Observable<void> {
-    // TODO: Replace with actual API call
-    // return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return from(
+      this.supabaseService.client
+        .from('app_users')
+        .delete()
+        .eq('id', id)
+        .then(({ error }) => {
+          if (error) throw error;
+        })
+    );
+  }
 
-    // Mock implementation
-    const index = this.mockUsers.findIndex(u => u.id === id);
-    if (index !== -1) {
-      this.mockUsers.splice(index, 1);
-    }
-    return of(void 0);
+  private mapUser(row: any): User {
+    return {
+      id: row.id,
+      username: row.username,
+      email: row.email,
+      role: row.role,
+      fullName: row.full_name,
+      createdAt: row.created_at ? new Date(row.created_at) : undefined,
+      updatedAt: row.updated_at ? new Date(row.updated_at) : undefined
+    };
   }
 }
