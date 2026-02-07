@@ -1,0 +1,575 @@
+<div class="site-content-editor">
+  <div class="page-header">
+    <div class="header-left">
+      <h1>Site Content Editor</h1>
+      <p class="subtitle">Edit all homepage content — changes appear instantly on the live site</p>
+    </div>
+    <button mat-stroked-button color="warn" (click)="resetAll()">
+      <mat-icon>restart_alt</mat-icon>
+      Reset to Defaults
+    </button>
+  </div>
+
+  <mat-tab-group [(selectedIndex)]="activeTab" animationDuration="200ms">
+
+    <!-- ========== HERO TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>image</mat-icon>&nbsp; Hero
+      </ng-template>
+      <div class="tab-content">
+        <h3 class="section-heading">Hero Section</h3>
+        <p class="section-desc">The main banner visitors see first</p>
+        <form [formGroup]="heroForm" (ngSubmit)="saveHero()" class="editor-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Badge Text</mat-label>
+            <input matInput formControlName="badge">
+            <mat-hint>Shown above the title (e.g. "🏔️ Nepal's Premier Adventure Company")</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <textarea matInput formControlName="title" rows="2"></textarea>
+            <mat-hint>Use \n for line breaks</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Subtitle</mat-label>
+            <textarea matInput formControlName="subtitle" rows="3"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Background Image URL</mat-label>
+            <input matInput formControlName="backgroundImage">
+          </mat-form-field>
+
+          <div class="preview-image" *ngIf="heroForm.get('backgroundImage')?.value">
+            <img [src]="heroForm.get('backgroundImage')?.value" alt="Hero preview">
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="heroForm.invalid">
+              <mat-icon>save</mat-icon> Save Hero
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <!-- ========== STATS TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>analytics</mat-icon>&nbsp; Stats
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Stats Bar</h3>
+            <p class="section-desc">Numbers shown in the hero section</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addStat()">
+            <mat-icon>add</mat-icon> Add Stat
+          </button>
+        </div>
+
+        <!-- Stat Form -->
+        <mat-card class="inline-form-card" *ngIf="editingStat !== undefined && (editingStat || statForm.dirty)">
+          <form [formGroup]="statForm" (ngSubmit)="saveStat()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Value</mat-label>
+                <input matInput formControlName="value" placeholder="e.g. 12+">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Label</mat-label>
+                <input matInput formControlName="label" placeholder="e.g. Years Experience">
+              </mat-form-field>
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelStatEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="statForm.invalid">
+                {{ editingStat ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+
+        <!-- Stats List -->
+        <div class="items-list">
+          <div class="list-item" *ngFor="let stat of stats">
+            <div class="item-content">
+              <strong class="item-value">{{ stat.value }}</strong>
+              <span class="item-label">{{ stat.label }}</span>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editStat(stat)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteStat(stat)" matTooltip="Delete" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== SERVICES TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>miscellaneous_services</mat-icon>&nbsp; Services
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Services</h3>
+            <p class="section-desc">Service cards shown on the homepage</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addService()">
+            <mat-icon>add</mat-icon> Add Service
+          </button>
+        </div>
+
+        <!-- Service Form -->
+        <mat-card class="inline-form-card" *ngIf="editingService !== undefined && (editingService || serviceForm.dirty)">
+          <form [formGroup]="serviceForm" (ngSubmit)="saveService()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Icon</mat-label>
+                <mat-select formControlName="icon">
+                  <mat-option *ngFor="let icon of materialIcons" [value]="icon">
+                    <mat-icon>{{ icon }}</mat-icon> {{ icon }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Color</mat-label>
+                <mat-select formControlName="colorClass">
+                  <mat-option *ngFor="let color of colorOptions" [value]="color.value">{{ color.label }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="2"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Link (section ID or route path)</mat-label>
+              <input matInput formControlName="link" placeholder="e.g. trekking or /contact">
+            </mat-form-field>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelServiceEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="serviceForm.invalid">
+                {{ editingService ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+
+        <!-- Services List -->
+        <div class="items-list">
+          <div class="list-item" *ngFor="let service of services">
+            <div class="item-content">
+              <mat-icon class="item-icon">{{ service.icon }}</mat-icon>
+              <div>
+                <strong>{{ service.title }}</strong>
+                <span class="item-label">{{ service.description }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editService(service)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteService(service)" matTooltip="Delete" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== TESTIMONIALS TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>format_quote</mat-icon>&nbsp; Testimonials
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Testimonials</h3>
+            <p class="section-desc">Customer reviews and ratings</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addTestimonial()">
+            <mat-icon>add</mat-icon> Add Testimonial
+          </button>
+        </div>
+
+        <!-- Rating -->
+        <mat-card class="inline-form-card rating-card">
+          <h4>Rating Display</h4>
+          <form [formGroup]="ratingForm" (ngSubmit)="saveRating()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Score (e.g. 4.8)</mat-label>
+                <input matInput formControlName="ratingScore">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Count (e.g. 150+)</mat-label>
+                <input matInput formControlName="ratingCount">
+              </mat-form-field>
+              <button mat-raised-button color="primary" type="submit" [disabled]="ratingForm.invalid">
+                <mat-icon>save</mat-icon> Save
+              </button>
+            </div>
+          </form>
+        </mat-card>
+
+        <!-- Testimonial Form -->
+        <mat-card class="inline-form-card" *ngIf="editingTestimonial !== undefined && (editingTestimonial || testimonialForm.dirty)">
+          <form [formGroup]="testimonialForm" (ngSubmit)="saveTestimonial()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Quote</mat-label>
+              <textarea matInput formControlName="quote" rows="3"></textarea>
+            </mat-form-field>
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Author Name</mat-label>
+                <input matInput formControlName="authorName">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Initials (e.g. EC)</mat-label>
+                <input matInput formControlName="authorInitials" maxlength="3">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Trip Name</mat-label>
+                <input matInput formControlName="tripName">
+              </mat-form-field>
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelTestimonialEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="testimonialForm.invalid">
+                {{ editingTestimonial ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+
+        <!-- Testimonials List -->
+        <div class="items-list">
+          <div class="list-item testimonial-item" *ngFor="let t of testimonials">
+            <div class="item-content">
+              <div class="testimonial-avatar">{{ t.authorInitials }}</div>
+              <div>
+                <strong>{{ t.authorName }}</strong>
+                <span class="item-label">{{ t.tripName }}</span>
+                <p class="testimonial-quote">"{{ t.quote }}"</p>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editTestimonial(t)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteTestimonial(t)" matTooltip="Delete" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== FAQ TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>help_outline</mat-icon>&nbsp; FAQ
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Frequently Asked Questions</h3>
+            <p class="section-desc">Questions shown on the homepage</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addFaq()">
+            <mat-icon>add</mat-icon> Add FAQ
+          </button>
+        </div>
+
+        <!-- FAQ Form -->
+        <mat-card class="inline-form-card" *ngIf="editingFaq !== undefined && (editingFaq || faqForm.dirty)">
+          <form [formGroup]="faqForm" (ngSubmit)="saveFaq()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Question</mat-label>
+              <input matInput formControlName="question">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Answer</mat-label>
+              <textarea matInput formControlName="answer" rows="4"></textarea>
+            </mat-form-field>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelFaqEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="faqForm.invalid">
+                {{ editingFaq ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+
+        <!-- FAQ List -->
+        <div class="items-list">
+          <div class="list-item faq-item" *ngFor="let faq of faqs; let i = index">
+            <div class="item-content">
+              <span class="faq-number">{{ i + 1 }}</span>
+              <div>
+                <strong>{{ faq.question }}</strong>
+                <p class="faq-answer">{{ faq.answer }}</p>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editFaq(faq)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteFaq(faq)" matTooltip="Delete" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== GALLERY TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>photo_library</mat-icon>&nbsp; Gallery
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Photo Gallery</h3>
+            <p class="section-desc">Images shown in the gallery section</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addGalleryImage()">
+            <mat-icon>add</mat-icon> Add Image
+          </button>
+        </div>
+
+        <!-- Gallery Form -->
+        <mat-card class="inline-form-card" *ngIf="editingGallery !== undefined && (editingGallery || galleryForm.dirty)">
+          <form [formGroup]="galleryForm" (ngSubmit)="saveGalleryImage()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Image URL</mat-label>
+              <input matInput formControlName="url">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Alt Text (optional)</mat-label>
+              <input matInput formControlName="alt">
+            </mat-form-field>
+            <div class="preview-image" *ngIf="galleryForm.get('url')?.value">
+              <img [src]="galleryForm.get('url')?.value" alt="Preview">
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelGalleryEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="galleryForm.invalid">
+                {{ editingGallery ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid">
+          <div class="gallery-item" *ngFor="let img of gallery">
+            <img [src]="img.url" [alt]="img.alt">
+            <div class="gallery-item-actions">
+              <button mat-icon-button (click)="editGalleryImage(img)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteGalleryImage(img)" matTooltip="Delete" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== TOURS TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>temple_hindu</mat-icon>&nbsp; Tours
+      </ng-template>
+      <div class="tab-content">
+        <div class="section-header-row">
+          <div>
+            <h3 class="section-heading">Cultural Tours</h3>
+            <p class="section-desc">Tour packages shown on the homepage</p>
+          </div>
+          <button mat-raised-button color="primary" (click)="addTour()">
+            <mat-icon>add</mat-icon> Add Tour
+          </button>
+        </div>
+
+        <!-- Tour Form -->
+        <mat-card class="inline-form-card" *ngIf="editingTour !== undefined && (editingTour || tourForm.dirty)">
+          <form [formGroup]="tourForm" (ngSubmit)="saveTour()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Tour Name</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Days</mat-label>
+                <input matInput type="number" formControlName="days" min="1">
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="2"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Image URL</mat-label>
+              <input matInput formControlName="imageUrl">
+            </mat-form-field>
+            <div class="preview-image" *ngIf="tourForm.get('imageUrl')?.value">
+              <img [src]="tourForm.get('imageUrl')?.value" alt="Tour preview">
+            </div>
+            <div class="form-actions-inline">
+              <button mat-button type="button" (click)="cancelTourEdit()">Cancel</button>
+              <button mat-raised-button color="primary" type="submit" [disabled]="tourForm.invalid">
+                {{ editingTour ? 'Update' : 'Add' }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+
+        <!-- Tours List -->
+        <div class="items-list tour-list">
+          <div class="list-item tour-item" *ngFor="let tour of culturalTours">
+            <div class="item-content">
+              <img [src]="tour.imageUrl" class="tour-thumb" [alt]="tour.name">
+              <div>
+                <strong>{{ tour.name }}</strong>
+                <span class="item-label">{{ tour.days }} Days — {{ tour.description }}</span>
+              </div>
+            </div>
+            <div class="item-actions">
+              <button mat-icon-button (click)="editTour(tour)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteTour(tour)" matTooltip="Delete" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- ========== CTA TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>campaign</mat-icon>&nbsp; CTA
+      </ng-template>
+      <div class="tab-content">
+        <h3 class="section-heading">Call to Action</h3>
+        <p class="section-desc">The closing section at the bottom of the homepage</p>
+        <form [formGroup]="ctaForm" (ngSubmit)="saveCTA()" class="editor-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Message</mat-label>
+            <textarea matInput formControlName="message" rows="3"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Director / Signoff Name</mat-label>
+            <input matInput formControlName="directorName">
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="ctaForm.invalid">
+              <mat-icon>save</mat-icon> Save CTA
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <!-- ========== COMPANY INFO TAB ========== -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>business</mat-icon>&nbsp; Company
+      </ng-template>
+      <div class="tab-content">
+        <h3 class="section-heading">Company Information</h3>
+        <p class="section-desc">Footer details, contact info, and registration</p>
+        <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" class="editor-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Company Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>WhatsApp Number</mat-label>
+              <input matInput formControlName="whatsapp">
+              <mat-hint>Without + or spaces (e.g. 9779862442639)</mat-hint>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Director Name</mat-label>
+              <input matInput formControlName="directorName">
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Address</mat-label>
+            <input matInput formControlName="address">
+          </mat-form-field>
+
+          <h4 class="subsection-title">Registration Details</h4>
+          <div class="form-row triple">
+            <mat-form-field appearance="outline">
+              <mat-label>Registration No.</mat-label>
+              <input matInput formControlName="registration">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>License No.</mat-label>
+              <input matInput formControlName="license">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>VAT No.</mat-label>
+              <input matInput formControlName="vat">
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="companyForm.invalid">
+              <mat-icon>save</mat-icon> Save Company Info
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+

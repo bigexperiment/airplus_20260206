@@ -1,0 +1,107 @@
+<div class="admin-dashboard">
+  <div class="page-header">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Welcome to the AirPlus Nepal CRM</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" (click)="navigate('/admin/treks')">
+      <div class="stat-icon cyan">
+        <mat-icon>terrain</mat-icon>
+      </div>
+      <div class="stat-info">
+        <span class="stat-number">{{ trekCount }}</span>
+        <span class="stat-label">Treks</span>
+      </div>
+    </div>
+
+    <div class="stat-card" (click)="navigate('/admin/bookings')">
+      <div class="stat-icon teal">
+        <mat-icon>book_online</mat-icon>
+      </div>
+      <div class="stat-info">
+        <span class="stat-number">{{ bookingCount }}</span>
+        <span class="stat-label">Bookings</span>
+      </div>
+      <span class="stat-badge" *ngIf="pendingBookings > 0">{{ pendingBookings }} pending</span>
+    </div>
+
+    <div class="stat-card" (click)="navigate('/admin/categories')">
+      <div class="stat-icon purple">
+        <mat-icon>category</mat-icon>
+      </div>
+      <div class="stat-info">
+        <span class="stat-number">{{ categoryCount }}</span>
+        <span class="stat-label">Categories</span>
+      </div>
+    </div>
+
+    <div class="stat-card" (click)="navigate('/admin/users')">
+      <div class="stat-icon orange">
+        <mat-icon>people</mat-icon>
+      </div>
+      <div class="stat-info">
+        <span class="stat-number">{{ userCount }}</span>
+        <span class="stat-label">Users</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="section-grid">
+    <mat-card class="quick-actions-card">
+      <mat-card-header>
+        <mat-card-title>Quick Actions</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="actions-list">
+          <button mat-stroked-button (click)="navigate('/admin/content')">
+            <mat-icon>edit</mat-icon>
+            Edit Site Content
+          </button>
+          <button mat-stroked-button (click)="navigate('/admin/treks/new')">
+            <mat-icon>add</mat-icon>
+            Add New Trek
+          </button>
+          <button mat-stroked-button (click)="navigate('/admin/bookings')">
+            <mat-icon>inbox</mat-icon>
+            View Bookings
+          </button>
+          <button mat-stroked-button (click)="navigate('/admin/categories')">
+            <mat-icon>category</mat-icon>
+            Manage Categories
+          </button>
+          <button mat-stroked-button (click)="navigate('/')">
+            <mat-icon>visibility</mat-icon>
+            View Live Site
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="recent-bookings-card">
+      <mat-card-header>
+        <mat-card-title>Recent Bookings</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="booking-list" *ngIf="recentBookings.length > 0">
+          <div class="booking-item" *ngFor="let booking of recentBookings">
+            <div class="booking-info">
+              <strong>{{ booking.customerName }}</strong>
+              <span class="booking-trek">{{ booking.trekName || 'General Inquiry' }}</span>
+            </div>
+            <mat-chip [class]="'status-' + booking.status.toLowerCase()">
+              {{ booking.status }}
+            </mat-chip>
+          </div>
+        </div>
+        <div class="empty-state" *ngIf="recentBookings.length === 0">
+          <mat-icon>inbox</mat-icon>
+          <p>No bookings yet</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

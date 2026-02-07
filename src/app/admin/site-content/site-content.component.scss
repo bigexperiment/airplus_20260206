@@ -1,0 +1,388 @@
+$accent-cyan: #0ea5e9;
+$accent-teal: #14b8a6;
+$text-dark: #0f172a;
+$text-medium: #334155;
+$text-light: #64748b;
+$border: #e2e8f0;
+
+.site-content-editor {
+  padding: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .header-left {
+    h1 {
+      margin: 0 0 4px;
+      font-size: 2rem;
+      font-weight: 800;
+      color: $text-dark;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: $text-light;
+      font-size: 1rem;
+    }
+  }
+}
+
+// Tabs
+::ng-deep .mat-mdc-tab-group {
+  .mat-mdc-tab-labels {
+    background: #fff;
+    border-radius: 14px;
+    padding: 6px;
+    border: 1px solid $border;
+    flex-wrap: wrap;
+  }
+
+  .mat-mdc-tab {
+    border-radius: 10px;
+    min-width: auto;
+
+    &.mdc-tab--active {
+      background: rgba(14, 165, 233, 0.08);
+    }
+  }
+}
+
+.tab-content {
+  padding: 32px 0;
+}
+
+.section-heading {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: $text-dark;
+  margin: 0 0 4px;
+}
+
+.section-desc {
+  color: $text-light;
+  font-size: 0.95rem;
+  margin: 0 0 28px;
+}
+
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  .section-heading, .section-desc {
+    margin-bottom: 0;
+  }
+
+  .section-desc {
+    margin-top: 4px;
+  }
+}
+
+.subsection-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $text-medium;
+  margin: 24px 0 16px;
+}
+
+// Forms
+.editor-form {
+  max-width: 700px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  &.triple {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+
+    &.triple {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.form-actions {
+  margin-top: 20px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.form-actions-inline {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.preview-image {
+  margin: 12px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 400px;
+  max-height: 200px;
+  border: 1px solid $border;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Inline Form Card
+.inline-form-card {
+  margin-bottom: 20px;
+  padding: 24px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(14, 165, 233, 0.2) !important;
+  background: rgba(14, 165, 233, 0.02) !important;
+  box-shadow: none !important;
+
+  h4 {
+    margin: 0 0 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-medium;
+  }
+}
+
+.rating-card {
+  margin-bottom: 24px;
+
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    mat-form-field {
+      flex: 1;
+    }
+
+    button {
+      flex-shrink: 0;
+      height: 48px;
+      margin-top: -18px;
+    }
+  }
+}
+
+// Items List
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid $border;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: rgba(14, 165, 233, 0.25);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .item-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+
+    .item-value {
+      font-size: 1.4rem;
+      color: $accent-cyan;
+      min-width: 60px;
+    }
+
+    .item-icon {
+      color: $accent-cyan;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+
+    strong {
+      display: block;
+      color: $text-dark;
+      font-size: 0.95rem;
+    }
+
+    .item-label {
+      display: block;
+      color: $text-light;
+      font-size: 0.85rem;
+      margin-top: 2px;
+    }
+  }
+
+  .item-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+}
+
+// Testimonial specific
+.testimonial-item {
+  align-items: flex-start;
+
+  .testimonial-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $accent-cyan, $accent-teal);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .testimonial-quote {
+    color: $text-light;
+    font-size: 0.88rem;
+    font-style: italic;
+    margin: 6px 0 0;
+    line-height: 1.6;
+  }
+}
+
+// FAQ specific
+.faq-item {
+  align-items: flex-start;
+
+  .faq-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(14, 165, 233, 0.1);
+    color: $accent-cyan;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .faq-answer {
+    color: $text-light;
+    font-size: 0.88rem;
+    margin: 6px 0 0;
+    line-height: 1.6;
+  }
+}
+
+// Gallery Grid
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gallery-item {
+  position: relative;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid $border;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery-item-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    button {
+      background: rgba(255, 255, 255, 0.9) !important;
+      backdrop-filter: blur(6px);
+
+      mat-icon {
+        font-size: 20px;
+      }
+    }
+  }
+
+  &:hover .gallery-item-actions {
+    opacity: 1;
+  }
+}
+
+// Tour specific
+.tour-item {
+  .tour-thumb {
+    width: 64px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .site-content-editor {
+    padding: 16px;
+  }
+
+  .page-header .header-left h1 {
+    font-size: 1.5rem;
+  }
+}
+

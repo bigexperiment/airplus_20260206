@@ -1,0 +1,63 @@
+<header class="main-header">
+  <div class="container header-content">
+    <a routerLink="/" class="logo">
+      <mat-icon>flight</mat-icon>
+      <span>AirPlus Nepal</span>
+    </a>
+
+    <nav class="main-nav">
+      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a mat-button routerLink="/treks" routerLinkActive="active">Treks</a>
+      <a mat-button routerLink="/about" routerLinkActive="active">About</a>
+      <a mat-button routerLink="/contact" routerLinkActive="active">Contact</a>
+
+      <ng-container *ngIf="authService.isAuthenticated()">
+        <button mat-button [matMenuTriggerFor]="adminMenu" class="admin-btn">
+          <mat-icon>admin_panel_settings</mat-icon>
+          Admin
+        </button>
+        <mat-menu #adminMenu="matMenu">
+          <a mat-menu-item routerLink="/admin/dashboard">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </a>
+          <a mat-menu-item routerLink="/admin/content">
+            <mat-icon>edit</mat-icon>
+            <span>Edit Site Content</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-menu-item routerLink="/admin/treks">
+            <mat-icon>hiking</mat-icon>
+            <span>Treks</span>
+          </a>
+          <a mat-menu-item routerLink="/admin/bookings">
+            <mat-icon>book_online</mat-icon>
+            <span>Bookings</span>
+          </a>
+          <a mat-menu-item routerLink="/admin/categories">
+            <mat-icon>category</mat-icon>
+            <span>Categories</span>
+          </a>
+          <a mat-menu-item routerLink="/admin/users" *ngIf="authService.isAdmin()">
+            <mat-icon>people</mat-icon>
+            <span>Users</span>
+          </a>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+
+      <a mat-button routerLink="/admin/login" *ngIf="!authService.isAuthenticated()" class="login-btn">
+        <mat-icon>login</mat-icon>
+        Login
+      </a>
+    </nav>
+
+    <button mat-icon-button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+</header>

@@ -1,0 +1,194 @@
+<div class="trek-detail-page" *ngIf="!loading && trek">
+  <!-- Hero Section -->
+  <div class="trek-hero" [style.background-image]="'url(' + trek.imageUrl + ')'">
+    <div class="hero-overlay">
+      <div class="container">
+        <button mat-icon-button (click)="goBack()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>{{ trek.name }}</h1>
+        <p>
+          <mat-icon>location_on</mat-icon>
+          {{ trek.region }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="trek-content">
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Overview -->
+        <mat-card class="section-card">
+          <mat-card-header>
+            <mat-card-title>Overview</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ trek.summary }}</p>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Trek Details -->
+        <mat-card class="section-card">
+          <mat-card-header>
+            <mat-card-title>Trek Details</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="details-grid">
+              <div class="detail-item">
+                <mat-icon color="primary">schedule</mat-icon>
+                <div>
+                  <strong>Duration</strong>
+                  <p>{{ trek.days }} days</p>
+                </div>
+              </div>
+              <div class="detail-item">
+                <mat-icon color="primary">trending_up</mat-icon>
+                <div>
+                  <strong>Difficulty</strong>
+                  <p>{{ trek.difficulty }}</p>
+                </div>
+              </div>
+              <div class="detail-item">
+                <mat-icon color="primary">wb_sunny</mat-icon>
+                <div>
+                  <strong>Best Season</strong>
+                  <p>{{ trek.bestSeason }}</p>
+                </div>
+              </div>
+              <div class="detail-item">
+                <mat-icon color="primary">attach_money</mat-icon>
+                <div>
+                  <strong>Price</strong>
+                  <p>${{ trek.price }} per person</p>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Itinerary -->
+        <mat-card class="section-card">
+          <mat-card-header>
+            <mat-card-title>Itinerary</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="itinerary-content">
+              <pre>{{ trek.itinerary }}</pre>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Price Card -->
+        <mat-card class="price-card">
+          <mat-card-content>
+            <div class="price-info">
+              <span class="price-label">From</span>
+              <span class="price-value">${{ trek.price }}</span>
+              <span class="price-unit">per person</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Booking Form -->
+        <mat-card class="booking-card">
+          <mat-card-header>
+            <mat-card-title>Book This Trek</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="customerName" required>
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="bookingForm.get('customerName')?.hasError('required')">
+                  Name is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="customerEmail" required>
+                <mat-icon matSuffix>email</mat-icon>
+                <mat-error *ngIf="bookingForm.get('customerEmail')?.hasError('required')">
+                  Email is required
+                </mat-error>
+                <mat-error *ngIf="bookingForm.get('customerEmail')?.hasError('email')">
+                  Invalid email format
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Phone</mat-label>
+                <input matInput formControlName="customerPhone" required>
+                <mat-icon matSuffix>phone</mat-icon>
+                <mat-error *ngIf="bookingForm.get('customerPhone')?.hasError('required')">
+                  Phone is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Number of People</mat-label>
+                <input matInput type="number" formControlName="numberOfPeople" min="1" required>
+                <mat-icon matSuffix>groups</mat-icon>
+                <mat-error *ngIf="bookingForm.get('numberOfPeople')?.hasError('required')">
+                  Number of people is required
+                </mat-error>
+                <mat-error *ngIf="bookingForm.get('numberOfPeople')?.hasError('min')">
+                  At least 1 person required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Preferred Date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="preferredDate" required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="bookingForm.get('preferredDate')?.hasError('required')">
+                  Date is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Message (Optional)</mat-label>
+                <textarea matInput formControlName="message" rows="3"></textarea>
+              </mat-form-field>
+
+              <button 
+                mat-raised-button 
+                color="primary" 
+                type="submit" 
+                class="full-width"
+                [disabled]="bookingForm.invalid || submitting">
+                <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+                <span *ngIf="!submitting">Submit Booking Request</span>
+              </button>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Contact Info -->
+        <mat-card class="contact-card">
+          <mat-card-header>
+            <mat-card-title>Need Help?</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p><mat-icon>phone</mat-icon> +977-1-4123456</p>
+            <p><mat-icon>email</mat-icon> info@trekkingnepal.com</p>
+            <button mat-stroked-button color="primary" routerLink="/contact" class="full-width">
+              Contact Us
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>

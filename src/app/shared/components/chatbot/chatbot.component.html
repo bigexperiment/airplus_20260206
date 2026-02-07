@@ -1,0 +1,103 @@
+<!-- Floating Chat Button -->
+<div class="chatbot-wrapper">
+
+  <!-- Greeting bubble (shows initially) -->
+  <div class="greeting-bubble" *ngIf="showGreeting && !isOpen" (click)="toggleChat()">
+    <span>Hi there! Need help? 🏔️</span>
+    <button class="greeting-close" (click)="showGreeting = false; $event.stopPropagation()">×</button>
+  </div>
+
+  <!-- Chat Toggle Button -->
+  <button class="chat-toggle" [class.open]="isOpen" [class.has-new]="hasNewMessage" (click)="toggleChat()" aria-label="Chat with Yeti">
+    <div class="yeti-face" *ngIf="!isOpen">
+      <div class="yeti-emoji" [ngSwitch]="yetiMood">
+        <span *ngSwitchCase="'happy'">🏔️</span>
+        <span *ngSwitchCase="'thinking'">💭</span>
+        <span *ngSwitchDefault>👋</span>
+      </div>
+    </div>
+    <mat-icon *ngIf="isOpen">close</mat-icon>
+    <span class="notification-dot" *ngIf="hasNewMessage && !isOpen"></span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" [class.open]="isOpen">
+
+    <!-- Chat Header -->
+    <div class="chat-header">
+      <div class="header-left">
+        <div class="yeti-avatar">
+          <span class="avatar-emoji">⛰️</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="header-info">
+          <h4>Yeti</h4>
+          <span class="status-text">
+            <ng-container *ngIf="isLoading">typing...</ng-container>
+            <ng-container *ngIf="!isLoading">Online • AirPlus Nepal</ng-container>
+          </span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" (click)="clearChat()" title="Clear chat">
+          <mat-icon>refresh</mat-icon>
+        </button>
+        <button class="icon-btn" (click)="toggleChat()" title="Close">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages Area -->
+    <div class="chat-messages" #messageContainer>
+      <div class="messages-inner">
+        <div *ngFor="let msg of messages" class="message-row" [class.user]="msg.role === 'user'" [class.bot]="msg.role === 'model'">
+          <div class="avatar-tiny" *ngIf="msg.role === 'model'">⛰️</div>
+          <div class="message-bubble" [class.user-bubble]="msg.role === 'user'" [class.bot-bubble]="msg.role === 'model'">
+            <p>{{ msg.text }}</p>
+            <span class="msg-time">{{ msg.timestamp | date:'shortTime' }}</span>
+          </div>
+        </div>
+
+        <!-- Typing indicator -->
+        <div class="message-row bot" *ngIf="isLoading">
+          <div class="avatar-tiny">⛰️</div>
+          <div class="message-bubble bot-bubble typing-bubble">
+            <div class="typing-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions (shown when few messages) -->
+    <div class="quick-actions" *ngIf="messages.length <= 1 && !isLoading">
+      <button class="quick-btn" (click)="userInput = 'What treks do you offer?'; sendMessage()">🥾 Treks</button>
+      <button class="quick-btn" (click)="userInput = 'Tell me about cultural tours'; sendMessage()">🏛️ Tours</button>
+      <button class="quick-btn" (click)="userInput = 'How can I contact you?'; sendMessage()">📞 Contact</button>
+      <button class="quick-btn" (click)="userInput = 'What fitness level do I need?'; sendMessage()">💪 Fitness</button>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input">
+      <div class="input-wrapper">
+        <input
+          type="text"
+          [(ngModel)]="userInput"
+          (keydown)="onKeyDown($event)"
+          placeholder="Ask me anything about Nepal..."
+          [disabled]="isLoading"
+          maxlength="500"
+        >
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!userInput.trim() || isLoading">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+      <span class="powered-by">Powered by Yeti AI ⛰️</span>
+    </div>
+  </div>
+</div>
+

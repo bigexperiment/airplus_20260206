@@ -1,0 +1,202 @@
+.about-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.page-header {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+              url('https://images.unsplash.com/photo-1571939228382-b2f2b585ce15?w=1600') center/cover;
+  color: white;
+  padding: 100px 0;
+  text-align: center;
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+  }
+
+  p {
+    font-size: 1.3rem;
+  }
+}
+
+.intro-section {
+  padding: 60px 0 40px;
+
+  mat-card {
+    h2 {
+      color: #3f51b5;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #555;
+      margin-bottom: 15px;
+    }
+  }
+}
+
+.mission-section {
+  padding: 40px 0;
+
+  .mission-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+
+    mat-card {
+      mat-card-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+
+        mat-icon {
+          font-size: 40px;
+          width: 40px;
+          height: 40px;
+        }
+
+        mat-card-title {
+          font-size: 1.5rem;
+          color: #333;
+        }
+      }
+
+      mat-card-content {
+        p {
+          line-height: 1.8;
+          color: #555;
+        }
+
+        ul {
+          list-style-position: inside;
+          color: #555;
+          line-height: 2;
+
+          li {
+            margin: 8px 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.team-section {
+  padding: 60px 0;
+
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 50px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+  }
+
+  .feature-item {
+    text-align: center;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      color: #333;
+      margin: 15px 0;
+    }
+
+    p {
+      color: #666;
+      line-height: 1.6;
+    }
+  }
+}
+
+.stats-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+  }
+
+  .stat-item {
+    text-align: center;
+
+    h3 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+  }
+}
+
+.cta-section {
+  padding: 60px 0;
+
+  .cta-card {
+    text-align: center;
+    padding: 40px;
+    background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+
+    h2 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    button {
+      font-size: 1.1rem;
+      padding: 12px 32px;
+      height: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+}

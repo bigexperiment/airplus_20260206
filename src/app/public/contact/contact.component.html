@@ -1,0 +1,236 @@
+<div class="contact-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-overlay">
+      <div class="container hero-content">
+        <h1>Contact Us</h1>
+        <p>Plan your perfect Himalayan adventure with us</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="contact-content">
+      <!-- Contact Form -->
+      <div class="form-section">
+        <div class="form-card">
+          <h2>Plan Your Trek</h2>
+          <p class="form-subtitle">Fill out the form below and we'll get back to you within 24 hours</p>
+
+          <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="name" required>
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="contactForm.get('name')?.hasError('required')">
+                  Name is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" required>
+                <mat-icon matSuffix>email</mat-icon>
+                <mat-error *ngIf="contactForm.get('email')?.hasError('required')">
+                  Email is required
+                </mat-error>
+                <mat-error *ngIf="contactForm.get('email')?.hasError('email')">
+                  Invalid email format
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Phone</mat-label>
+                <input matInput formControlName="phone" required>
+                <mat-icon matSuffix>phone</mat-icon>
+                <mat-error *ngIf="contactForm.get('phone')?.hasError('required')">
+                  Phone is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Country</mat-label>
+                <mat-select formControlName="country">
+                  <mat-option value="USA">United States</mat-option>
+                  <mat-option value="UK">United Kingdom</mat-option>
+                  <mat-option value="Canada">Canada</mat-option>
+                  <mat-option value="Australia">Australia</mat-option>
+                  <mat-option value="Germany">Germany</mat-option>
+                  <mat-option value="France">France</mat-option>
+                  <mat-option value="Japan">Japan</mat-option>
+                  <mat-option value="India">India</mat-option>
+                  <mat-option value="Other">Other</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>public</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Interested Trek/Tour</mat-label>
+              <mat-select formControlName="subject">
+                <mat-option value="Everest Base Camp">Everest Base Camp (11 Days)</mat-option>
+                <mat-option value="Annapurna Base Camp">Annapurna Base Camp (11 Days)</mat-option>
+                <mat-option value="Annapurna Circuit">Annapurna Circuit (15 Days)</mat-option>
+                <mat-option value="Manaslu Circuit">Manaslu Circuit (15 Days)</mat-option>
+                <mat-option value="Poon Hill">Poon Hill (8 Days)</mat-option>
+                <mat-option value="Cultural Tour">Cultural Tour</mat-option>
+                <mat-option value="Custom">Custom Itinerary</mat-option>
+                <mat-option value="Other">Other Inquiry</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>hiking</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Your Message</mat-label>
+              <textarea matInput formControlName="message" rows="5" placeholder="Tell us about your travel plans, group size, preferred dates, and any special requirements..."></textarea>
+              <mat-error *ngIf="contactForm.get('message')?.hasError('required')">
+                Message is required
+              </mat-error>
+            </mat-form-field>
+
+            <button
+              mat-raised-button
+              type="submit"
+              class="submit-btn"
+              [disabled]="contactForm.invalid || submitting">
+              <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+              <span *ngIf="!submitting">
+                <mat-icon>send</mat-icon>
+                Send Message
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="info-section">
+        <!-- Main Contact Card -->
+        <div class="info-card">
+          <h3>Get in Touch</h3>
+
+          <div class="contact-item">
+            <div class="icon-wrapper">
+              <mat-icon>person</mat-icon>
+            </div>
+            <div class="contact-details">
+              <strong>Contact Person</strong>
+              <p>Madan Bhandari (Director)</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="icon-wrapper">
+              <mat-icon>location_on</mat-icon>
+            </div>
+            <div class="contact-details">
+              <strong>Office Address</strong>
+              <p>Bhagawatisthan, Thamel<br>Kathmandu, Nepal</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="icon-wrapper">
+              <mat-icon>phone</mat-icon>
+            </div>
+            <div class="contact-details">
+              <strong>Phone Numbers</strong>
+              <p>+977 1 4525454<br>+977 9862442639</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="icon-wrapper">
+              <mat-icon>email</mat-icon>
+            </div>
+            <div class="contact-details">
+              <strong>Email</strong>
+              <a href="mailto:airplusnepal@gmail.com">airplusnepal&#64;gmail.com</a>
+            </div>
+          </div>
+
+          <a href="https://wa.me/9779862442639" target="_blank" class="whatsapp-link">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+            Chat on WhatsApp
+          </a>
+        </div>
+
+        <!-- Local Representatives -->
+        <div class="info-card reps-card">
+          <h3>Local Representatives</h3>
+          <p class="reps-intro">Contact our local representatives for inquiries in your region</p>
+
+          <div class="rep-item">
+            <span class="country">
+              <mat-icon>flag</mat-icon>
+              Australia
+            </span>
+            <a href="mailto:homnathbhandari2016@gmail.com">homnathbhandari2016&#64;gmail.com</a>
+          </div>
+
+          <div class="rep-item">
+            <span class="country">
+              <mat-icon>flag</mat-icon>
+              Canada
+            </span>
+            <a href="mailto:Subashbhandari1902@gmail.com">Subashbhandari1902&#64;gmail.com</a>
+          </div>
+
+          <div class="rep-item">
+            <span class="country">
+              <mat-icon>flag</mat-icon>
+              Japan
+            </span>
+            <a href="mailto:bhandariraju575@gmail.com">bhandariraju575&#64;gmail.com</a>
+          </div>
+
+          <div class="rep-item">
+            <span class="country">
+              <mat-icon>flag</mat-icon>
+              USA
+            </span>
+            <a href="mailto:ganeshadhikari332@gmail.com">ganeshadhikari332&#64;gmail.com</a>
+          </div>
+        </div>
+
+        <!-- Office Hours -->
+        <div class="info-card hours-card">
+          <h3>Office Hours</h3>
+          <div class="hours-list">
+            <div class="hours-item">
+              <span>Sunday - Friday</span>
+              <span>9:00 AM - 6:00 PM</span>
+            </div>
+            <div class="hours-item">
+              <span>Saturday</span>
+              <span>10:00 AM - 4:00 PM</span>
+            </div>
+          </div>
+          <p class="timezone">Nepal Standard Time (UTC+5:45)</p>
+        </div>
+
+        <!-- Registration Info -->
+        <div class="info-card registration-card">
+          <h3>Company Registration</h3>
+          <div class="reg-items">
+            <div class="reg-item">
+              <span class="label">Registration</span>
+              <span class="value">194768/075/076</span>
+            </div>
+            <div class="reg-item">
+              <span class="label">License</span>
+              <span class="value">2605</span>
+            </div>
+            <div class="reg-item">
+              <span class="label">VAT</span>
+              <span class="value">606643944</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

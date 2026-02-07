@@ -1,0 +1,114 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 450px;
+}
+
+.login-card {
+  mat-card-header {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0 20px;
+
+    .header-content {
+      text-align: center;
+
+      mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 15px;
+      }
+
+      mat-card-title {
+        font-size: 2rem;
+        margin-bottom: 8px;
+      }
+
+      mat-card-subtitle {
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  mat-card-content {
+    padding: 30px;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .login-button {
+        margin-top: 10px;
+        height: 48px;
+        font-size: 1.1rem;
+
+        mat-spinner {
+          display: inline-block;
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .demo-credentials {
+      margin-top: 30px;
+      padding-top: 20px;
+
+      mat-divider {
+        margin-bottom: 20px;
+      }
+
+      .demo-text {
+        font-weight: 500;
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      p {
+        color: #666;
+        margin: 5px 0;
+        font-size: 0.95rem;
+
+        strong {
+          color: #333;
+        }
+      }
+    }
+  }
+
+  mat-card-actions {
+    padding: 0 30px 30px;
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .login-card {
+    mat-card-header .header-content {
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+      }
+
+      mat-card-title {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

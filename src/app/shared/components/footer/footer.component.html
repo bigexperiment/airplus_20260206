@@ -1,0 +1,76 @@
+<footer class="main-footer" *ngIf="company">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section brand">
+        <div class="logo">
+          <mat-icon>flight</mat-icon>
+          <span>{{ company.name }}</span>
+        </div>
+        <p>Your trusted partner for unforgettable Himalayan adventures. Licensed and registered trekking company with 12+ years of experience.</p>
+        <div class="registration-info">
+          <span>Reg: {{ company.registration }}</span>
+          <span>License: {{ company.license }}</span>
+          <span>VAT: {{ company.vat }}</span>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/treks">Treks</a></li>
+          <li><a routerLink="/about">About Us</a></li>
+          <li><a routerLink="/contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h4>Contact Info</h4>
+        <div class="contact-item">
+          <mat-icon>person</mat-icon>
+          <span>{{ company.directorName }}</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>location_on</mat-icon>
+          <span>{{ company.address }}</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>phone</mat-icon>
+          <span>{{ company.phone }}</span>
+        </div>
+        <div class="contact-item">
+          <mat-icon>email</mat-icon>
+          <a [href]="'mailto:' + company.email">{{ company.email }}</a>
+        </div>
+        <div class="contact-item">
+          <mat-icon>chat</mat-icon>
+          <a [href]="'https://wa.me/' + company.whatsapp" target="_blank">WhatsApp: +{{ company.whatsapp }}</a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h4>Local Representatives</h4>
+        <div class="rep-item">
+          <span class="country">Australia</span>
+          <a href="mailto:homnathbhandari2016@gmail.com">homnathbhandari2016&#64;gmail.com</a>
+        </div>
+        <div class="rep-item">
+          <span class="country">Canada</span>
+          <a href="mailto:Subashbhandari1902@gmail.com">Subashbhandari1902&#64;gmail.com</a>
+        </div>
+        <div class="rep-item">
+          <span class="country">Japan</span>
+          <a href="mailto:bhandariraju575@gmail.com">bhandariraju575&#64;gmail.com</a>
+        </div>
+        <div class="rep-item">
+          <span class="country">USA</span>
+          <a href="mailto:ganeshadhikari332@gmail.com">ganeshadhikari332&#64;gmail.com</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ currentYear }} {{ company.name }}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,149 @@
+<div class="trek-form-page">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Edit Trek' : 'Create New Trek' }}</h1>
+  </div>
+
+  <mat-card *ngIf="!loading">
+    <mat-card-content>
+      <form [formGroup]="trekForm" (ngSubmit)="submit()">
+        <div class="form-grid">
+          <!-- Basic Information -->
+          <div class="form-section">
+            <h3>Basic Information</h3>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Trek Name</mat-label>
+              <input matInput formControlName="name" required>
+              <mat-error *ngIf="trekForm.get('name')?.hasError('required')">
+                Trek name is required
+              </mat-error>
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Region</mat-label>
+                <mat-select formControlName="region" required>
+                  <mat-option *ngFor="let region of regions" [value]="region">
+                    {{ region }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="trekForm.get('region')?.hasError('required')">
+                  Region is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Difficulty</mat-label>
+                <mat-select formControlName="difficulty" required>
+                  <mat-option *ngFor="let difficulty of difficulties" [value]="difficulty">
+                    {{ difficulty }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="trekForm.get('difficulty')?.hasError('required')">
+                  Difficulty is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Duration (Days)</mat-label>
+                <input matInput type="number" formControlName="days" min="1" required>
+                <mat-error *ngIf="trekForm.get('days')?.hasError('required')">
+                  Duration is required
+                </mat-error>
+                <mat-error *ngIf="trekForm.get('days')?.hasError('min')">
+                  Must be at least 1 day
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Price (USD)</mat-label>
+                <input matInput type="number" formControlName="price" min="0" required>
+                <mat-icon matPrefix>attach_money</mat-icon>
+                <mat-error *ngIf="trekForm.get('price')?.hasError('required')">
+                  Price is required
+                </mat-error>
+                <mat-error *ngIf="trekForm.get('price')?.hasError('min')">
+                  Price must be positive
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Best Season</mat-label>
+                <input matInput formControlName="bestSeason" required>
+                <mat-hint>e.g., March-May, September-November</mat-hint>
+                <mat-error *ngIf="trekForm.get('bestSeason')?.hasError('required')">
+                  Best season is required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="categoryId">
+                  <mat-option [value]="null">None</mat-option>
+                  <mat-option *ngFor="let category of categories" [value]="category.id">
+                    {{ category.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Image URL</mat-label>
+              <input matInput formControlName="imageUrl" required>
+              <mat-hint>Enter a valid image URL</mat-hint>
+              <mat-error *ngIf="trekForm.get('imageUrl')?.hasError('required')">
+                Image URL is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Description -->
+          <div class="form-section">
+            <h3>Description</h3>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Summary</mat-label>
+              <textarea matInput formControlName="summary" rows="4" required></textarea>
+              <mat-hint>Brief description of the trek</mat-hint>
+              <mat-error *ngIf="trekForm.get('summary')?.hasError('required')">
+                Summary is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Itinerary</mat-label>
+              <textarea matInput formControlName="itinerary" rows="10" required></textarea>
+              <mat-hint>Detailed day-by-day itinerary</mat-hint>
+              <mat-error *ngIf="trekForm.get('itinerary')?.hasError('required')">
+                Itinerary is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button mat-button type="button" (click)="cancel()">
+            Cancel
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit"
+            [disabled]="trekForm.invalid || submitting">
+            <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+            <span *ngIf="!submitting">{{ isEditMode ? 'Update' : 'Create' }} Trek</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

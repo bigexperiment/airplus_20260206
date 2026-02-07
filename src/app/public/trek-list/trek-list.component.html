@@ -1,0 +1,125 @@
+<div class="trek-list-page">
+  <div class="page-header">
+    <div class="container">
+      <h1>Explore Our Treks</h1>
+      <p>Find your perfect Himalayan adventure</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Filters -->
+    <mat-card class="filter-card">
+      <mat-card-content>
+        <div class="filters-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput [(ngModel)]="searchText" placeholder="Search treks...">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Region</mat-label>
+            <mat-select [(ngModel)]="filter.region">
+              <mat-option [value]="undefined">All Regions</mat-option>
+              <mat-option *ngFor="let region of regions" [value]="region">
+                {{ region }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Difficulty</mat-label>
+            <mat-select [(ngModel)]="filter.difficulty">
+              <mat-option [value]="undefined">All Levels</mat-option>
+              <mat-option *ngFor="let difficulty of difficulties" [value]="difficulty">
+                {{ difficulty }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Min Days</mat-label>
+            <input matInput type="number" [(ngModel)]="filter.minDays" placeholder="Min">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Max Days</mat-label>
+            <input matInput type="number" [(ngModel)]="filter.maxDays" placeholder="Max">
+          </mat-form-field>
+
+          <div class="filter-actions">
+            <button mat-raised-button color="primary" (click)="applyFilters()">
+              <mat-icon>filter_list</mat-icon>
+              Apply Filters
+            </button>
+            <button mat-button (click)="clearFilters()">
+              <mat-icon>clear</mat-icon>
+              Clear
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <!-- Trek List -->
+    <div *ngIf="!loading" class="treks-section">
+      <div class="results-info">
+        <p>Found {{ filteredTreks.length }} trek(s)</p>
+      </div>
+
+      <div *ngIf="filteredTreks.length === 0" class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <h3>No treks found</h3>
+        <p>Try adjusting your filters</p>
+      </div>
+
+      <div class="treks-grid">
+        <mat-card *ngFor="let trek of filteredTreks" class="trek-card">
+          <img mat-card-image [src]="trek.imageUrl" [alt]="trek.name">
+          <mat-card-header>
+            <mat-card-title>{{ trek.name }}</mat-card-title>
+            <mat-card-subtitle>
+              <mat-icon>location_on</mat-icon>
+              {{ trek.region }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="trek-summary">{{ trek.summary }}</p>
+            
+            <div class="trek-info">
+              <div class="info-item">
+                <mat-icon>schedule</mat-icon>
+                <span>{{ trek.days }} days</span>
+              </div>
+              <div class="info-item">
+                <mat-icon>trending_up</mat-icon>
+                <span>{{ trek.difficulty }}</span>
+              </div>
+              <div class="info-item">
+                <mat-icon>wb_sunny</mat-icon>
+                <span>{{ trek.bestSeason }}</span>
+              </div>
+            </div>
+
+            <div class="trek-price">
+              <span class="price-label">From</span>
+              <span class="price-value">${{ trek.price }}</span>
+              <span class="price-unit">per person</span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="viewTrek(trek.id)">
+              View Details
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
